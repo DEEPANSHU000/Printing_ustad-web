@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>All Products | Printing Ustad</title>
+<meta name="description" content="Browse all custom printing products — T-shirts, mugs, bottles, visiting cards, diaries, photo frames and more at Printing Ustad."/>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
+<style>
+  * { font-family: 'Inter', sans-serif; }
+  .product-card:hover .card-overlay { opacity:1; transform:translateY(0); }
+  .card-overlay { opacity:0; transform:translateY(100%); transition:all .3s ease; }
+  .cat-link.active { color:#2563eb; font-weight:600; }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- Top Bar -->
+<div class="bg-purple-950 text-purple-100 text-xs py-2 px-4">
+  <div class="max-w-7xl mx-auto flex items-center justify-between">
+    <span class="hidden md:block">🇮🇳 India's Trusted Custom Printing Platform</span>
+    <div class="flex items-center gap-6">
+      <a href="tel:9876543210" class="flex items-center gap-1 hover:text-yellow-400"><span class="material-symbols-outlined text-sm">call</span> 98765 43210</a>
+      <a href="mailto:support@printingustad.com" class="flex items-center gap-1 hover:text-yellow-400"><span class="material-symbols-outlined text-sm">mail</span> support@printingustad.com</a>
+    </div>
+  </div>
+</div>
+
+<!-- Navbar -->
+<header class="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-purple-100 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-4">
+    <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
+      <img src="logo.png" alt="Printing Ustad" class="h-10 w-auto object-contain">
+      <span class="font-bold text-xl text-gray-900 hidden sm:block">Printing Ustad</span>
+    </a>
+    <div class="flex-1 max-w-xl mx-auto">
+      <div class="relative">
+        <input id="search-input" type="text" placeholder="Search products..." class="w-full border border-gray-300 rounded-full py-2 pl-4 pr-10 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"/>
+        <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-purple-600"><span class="material-symbols-outlined text-xl">search</span></button>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 flex-shrink-0">
+      <a href="info.html" class="hidden md:flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"><span class="material-symbols-outlined text-xl">person</span></a>
+      <a href="cart.html" class="relative flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900">
+        <span class="material-symbols-outlined text-xl">shopping_cart</span>
+        <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Breadcrumb -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+  <nav class="text-xs text-gray-500 flex items-center gap-1">
+    <a href="index.html" class="hover:text-purple-600">Home</a>
+    <span class="material-symbols-outlined text-sm">chevron_right</span>
+    <span class="text-gray-800 font-medium">All Products</span>
+  </nav>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 flex gap-6 pb-16">
+
+  <!-- Sidebar -->
+  <aside class="hidden lg:block w-56 flex-shrink-0">
+    <div class="sticky top-24 space-y-6">
+      <div>
+        <h3 class="font-bold text-sm text-gray-900 mb-3 uppercase tracking-wider">Categories</h3>
+        <ul class="space-y-2 text-sm" id="cat-list">
+          <li><button class="cat-link active w-full text-left hover:text-purple-600 transition-colors" data-cat="All">All Products</button></li>
+          <li><button class="cat-link w-full text-left hover:text-purple-600 transition-colors" data-cat="Apparel">T-Shirts & Hoodies</button></li>
+          <li><button class="cat-link w-full text-left hover:text-purple-600 transition-colors" data-cat="Mugs">Mugs & Drinkware</button></li>
+          <li><button class="cat-link w-full text-left hover:text-purple-600 transition-colors" data-cat="Bottles">Water Bottles</button></li>
+          <li><button class="cat-link w-full text-left hover:text-purple-600 transition-colors" data-cat="Stationery">Visiting Cards</button></li>
+          <li><button class="cat-link w-full text-left hover:text-purple-600 transition-colors" data-cat="Diaries">Diaries & Notebooks</button></li>
+          <li><button class="cat-link w-full text-left hover:text-purple-600 transition-colors" data-cat="Frames">Photo Frames</button></li>
+          <li><button class="cat-link w-full text-left hover:text-purple-600 transition-colors" data-cat="Accessories">Caps & Accessories</button></li>
+          <li><button class="cat-link w-full text-left hover:text-purple-600 transition-colors" data-cat="Calendars">Calendars</button></li>
+          <li><button class="cat-link w-full text-left hover:text-purple-600 transition-colors" data-cat="Corporate">Corporate Kits</button></li>
+        </ul>
+      </div>
+      <div class="border-t border-gray-200 pt-4">
+        <h3 class="font-bold text-sm text-gray-900 mb-3 uppercase tracking-wider">Price Range</h3>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li><button class="price-link hover:text-purple-600 w-full text-left" data-max="100">Under ₹100</button></li>
+          <li><button class="price-link hover:text-purple-600 w-full text-left" data-min="100" data-max="500">₹100 – ₹500</button></li>
+          <li><button class="price-link hover:text-purple-600 w-full text-left" data-min="500" data-max="1000">₹500 – ₹1,000</button></li>
+          <li><button class="price-link hover:text-purple-600 w-full text-left" data-min="1000">₹1,000+</button></li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Grid -->
+  <main class="flex-1">
+    <!-- Top Bar -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">All Custom Products</h1>
+        <p class="text-sm text-gray-500 mt-1" id="result-count">Showing all products</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <!-- Mobile filter toggle -->
+        <button id="mobile-filter-btn" class="lg:hidden flex items-center gap-1 border border-gray-300 rounded-lg px-3 py-2 text-sm hover:bg-gray-100">
+          <span class="material-symbols-outlined text-lg">tune</span> Filters
+        </button>
+        <select id="sort-select" class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-purple-500">
+          <option value="default">Sort by: Featured</option>
+          <option value="low-high">Price: Low to High</option>
+          <option value="high-low">Price: High to Low</option>
+          <option value="name">Name: A-Z</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <!-- Cards rendered by JS -->
+    </div>
+
+    <!-- No Results -->
+    <div id="no-results" class="hidden text-center py-16">
+      <span class="material-symbols-outlined text-6xl text-gray-300 mb-4">search_off</span>
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">No products found</h3>
+      <p class="text-gray-500">Try a different search or category</p>
+      <button onclick="resetAll()" class="mt-4 bg-purple-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors">Show All Products</button>
+    </div>
+  </main>
+</div>
+
+<!-- Footer (same as index) -->
+<footer class="bg-gray-50 pt-10 pb-6 border-t border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <img src="logo.png" alt="Printing Ustad" class="h-8 w-auto object-contain">
+          <span class="font-bold text-gray-900">Printing Ustad</span>
+        </div>
+        <p class="text-xs text-gray-500 leading-relaxed">India's trusted custom printing platform.</p>
+      </div>
+      <div>
+        <h4 class="font-bold text-gray-900 mb-3 text-xs">Quick Links</h4>
+        <ul class="space-y-1 text-xs text-gray-600">
+          <li><a href="shop.html" class="hover:text-gray-900">All Products</a></li>
+          <li><a href="customizer.html" class="hover:text-gray-900">Design Studio</a></li>
+          <li><a href="cart.html" class="hover:text-gray-900">Cart</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-bold text-gray-900 mb-3 text-xs">Company</h4>
+        <ul class="space-y-1 text-xs text-gray-600">
+          <li><a href="info.html#about" class="hover:text-gray-900">About Us</a></li>
+          <li><a href="info.html#contact" class="hover:text-gray-900">Contact</a></li>
+          <li><a href="info.html#privacy" class="hover:text-gray-900">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-bold text-gray-900 mb-3 text-xs">Support</h4>
+        <ul class="space-y-1 text-xs text-gray-600">
+          <li><a href="info.html#shipping" class="hover:text-gray-900">Shipping</a></li>
+          <li><a href="info.html#returns" class="hover:text-gray-900">Returns</a></li>
+          <li><a href="info.html#terms" class="hover:text-gray-900">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-200 pt-4 text-xs text-gray-400 text-center">© 2026 Printing Ustad. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+(function(){
+// ── All Products Data ──
+const allProducts = [
+  { id:'rn-tshirt', name:'Round Neck T-Shirts', price:399, minQty:1, cat:'Apparel', img:'https://img-srv.arcprint.com/adpsSTG/category/1774075905173_290.jpg/full/400,400/0/default.webp' },
+  { id:'polo-tshirt', name:'Polo T-Shirts', price:650, minQty:1, cat:'Apparel', img:'https://img-srv.arcprint.com/adpsSTG/category/1774075758039_237.jpg/full/400,400/0/default.webp' },
+  { id:'custom-hoodie', name:'Custom Hoodies', price:1265, minQty:1, cat:'Apparel', img:'https://img-srv.arcprint.com/adpsSTG/category/1733319874776_931.jpg/full/400,400/0/default.webp' },
+  { id:'custom-caps', name:'Custom Caps', price:150, minQty:10, cat:'Accessories', img:'https://img-srv.arcprint.com/adpsSTG/category/1687873327336_970.jpg/full/400,400/0/default.webp' },
+  { id:'photo-cup', name:'Photo Cup', price:230, minQty:1, cat:'Mugs', img:'https://img-srv.arcprint.com/adpsSTG/category/1687877530935_150.jpg/full/400,400/0/default.webp' },
+  { id:'magic-mug', name:'Magic Mugs', price:350, minQty:1, cat:'Mugs', img:'https://img-srv.arcprint.com/adpsSTG/category/1765530043357_329.jpg/full/400,400/0/default.webp' },
+  { id:'led-bottle', name:'LED Temp Water Bottle', price:549, minQty:1, cat:'Bottles', img:'https://img-srv.arcprint.com/adpsSTG/category/water-bottle-in-type-4.jpg/full/400,400/0/default.webp' },
+  { id:'carabiner-bottle', name:'Carabiner Water Bottles', price:325, minQty:1, cat:'Bottles', img:'https://img-srv.arcprint.com/adpsSTG/category/1681901382671_191.jpg/full/400,400/0/default.webp' },
+  { id:'acrylic-frame', name:'Acrylic Photo Frames', price:450, minQty:1, cat:'Frames', img:'https://img-srv.arcprint.com/adpsSTG/category/1687872720138_892.jpg/full/400,400/0/default.webp' },
+  { id:'wood-frame', name:'Wooden Photo Frames', price:800, minQty:1, cat:'Frames', img:'https://img-srv.arcprint.com/adpsSTG/category/1687874765305_638.jpg/full/400,400/0/default.webp' },
+  { id:'led-frame', name:'LED Clip On Frame', price:850, minQty:1, cat:'Frames', img:'https://img-srv.arcprint.com/adpsSTG/category/1687875115423_350.jpg/full/400,400/0/default.webp' },
+  { id:'acrylic-clock', name:'Acrylic Clocks', price:999, minQty:1, cat:'Frames', img:'https://img-srv.arcprint.com/adpsSTG/category/1687872653926_751.jpg/full/400,400/0/default.webp' },
+  { id:'pen-gold', name:'Pen with Golden Touch', price:58, minQty:1, cat:'Stationery', img:'https://img-srv.arcprint.com/adpsSTG/category/1678351724818_367.jpg/full/400,400/0/default.webp' },
+  { id:'keychain', name:'Keychains', price:120, minQty:1, cat:'Accessories', img:'https://img-srv.arcprint.com/adpsSTG/category/1687874976160_151.jpg/full/400,400/0/default.webp' },
+  { id:'luxury-diary', name:'Luxury Diary & Pen Set', price:675, minQty:1, cat:'Diaries', img:'https://img-srv.arcprint.com/adpsSTG/category/1725621427039_318.jpg/full/400,400/0/default.webp' },
+  { id:'leather-diary', name:'Custom Leather Diary', price:230, minQty:1, cat:'Diaries', img:'https://img-srv.arcprint.com/adpsSTG/category/1720882534503_377.jpg/full/400,400/0/default.webp' },
+  { id:'exec-diary', name:'Executive Diary', price:375, minQty:1, cat:'Diaries', img:'https://img-srv.arcprint.com/adpsSTG/category/1687873546838_915.jpg/full/400,400/0/default.webp' },
+  { id:'desk-cal', name:'Desk Calendars', price:270, minQty:1, cat:'Calendars', img:'https://img-srv.arcprint.com/adpsSTG/category/1761832333077_818.jpg/full/400,400/0/default.webp' },
+  { id:'wall-cal', name:'Wall Calendars', price:20, minQty:1, cat:'Calendars', img:'https://img-srv.arcprint.com/adpsSTG/category/1761832262857_830.jpg/full/400,400/0/default.webp' },
+  { id:'mousepad-cal', name:'Mouse Pad Calendars', price:170, minQty:1, cat:'Calendars', img:'https://img-srv.arcprint.com/adpsSTG/category/1761832422386_191.jpg/full/400,400/0/default.webp' },
+  { id:'welcome-kit', name:'Office Welcome Kit', price:700, minQty:1, cat:'Corporate', img:'https://img-srv.arcprint.com/adpsSTG/category/1687873459441_632.jpg/full/400,400/0/default.webp' },
+  { id:'fusion-combo', name:'Fusion Combo', price:1475, minQty:1, cat:'Corporate', img:'https://img-srv.arcprint.com/adpsSTG/category/1725621483382_603.jpg/full/400,400/0/default.webp' },
+  { id:'new-hire-box', name:'New Hire Swag Box', price:875, minQty:1, cat:'Corporate', img:'https://img-srv.arcprint.com/adpsSTG/category/1725621504589_922.jpg/full/400,400/0/default.webp' },
+  { id:'drinkware-combo', name:'3 in 1 Drinkware Combo', price:1150, minQty:1, cat:'Corporate', img:'https://img-srv.arcprint.com/adpsSTG/category/1725621346185_454.jpg/full/400,400/0/default.webp' },
+];
+
+let activeCat = 'All';
+let priceMin = 0;
+let priceMax = Infinity;
+
+const grid = document.getElementById('product-grid');
+const resultCount = document.getElementById('result-count');
+const noResults = document.getElementById('no-results');
+const searchInput = document.getElementById('search-input');
+const sortSelect = document.getElementById('sort-select');
+
+function renderGrid() {
+  const query = searchInput.value.toLowerCase().trim();
+  let filtered = allProducts.filter(p => {
+    const matchCat = activeCat === 'All' || p.cat === activeCat;
+    const matchSearch = !query || p.name.toLowerCase().includes(query);
+    const matchPrice = p.price >= priceMin && p.price <= priceMax;
+    return matchCat && matchSearch && matchPrice;
+  });
+
+  // Sort
+  const sort = sortSelect.value;
+  if (sort === 'low-high') filtered.sort((a,b) => a.price - b.price);
+  else if (sort === 'high-low') filtered.sort((a,b) => b.price - a.price);
+  else if (sort === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '';
+    noResults.classList.remove('hidden');
+    resultCount.textContent = '0 products found';
+    return;
+  }
+
+  noResults.classList.add('hidden');
+  resultCount.textContent = `Showing ${filtered.length} product${filtered.length !== 1 ? 's' : ''}`;
+
+  grid.innerHTML = filtered.map(p => `
+    <div class="product-card bg-white rounded-3xl border border-purple-100 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
+      <a href="product.html" class="block">
+        <div class="relative overflow-hidden aspect-square bg-purple-50">
+          <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"/>
+          ${p.minQty > 1 ? `<span class="absolute top-2 left-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">Min. ${p.minQty}</span>` : ''}
+          <div class="card-overlay absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm p-2 flex gap-2">
+            <button onclick="event.preventDefault();quickAdd('${p.id}','${p.name}',${p.price},'${p.img}')" class="flex-1 bg-purple-600 text-white text-xs font-semibold py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-sm">add_shopping_cart</span> Add
+            </button>
+            <a href="customizer.html" onclick="event.stopPropagation()" class="flex-1 border border-purple-600 text-purple-600 text-xs font-semibold py-2 rounded-lg text-center hover:bg-purple-50 transition-colors">Customize</a>
+          </div>
+        </div>
+      </a>
+      <div class="p-3">
+        <h3 class="text-sm font-medium text-gray-800 leading-tight mb-1 line-clamp-2">${p.name}</h3>
+        <p class="text-purple-700 font-bold text-sm">₹${p.price.toLocaleString('en-IN')}</p>
+        <p class="text-[11px] text-gray-400 mt-0.5">Min. qty: ${p.minQty}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Category Filter ──
+document.querySelectorAll('.cat-link').forEach(btn => {
+  btn.addEventListener('click', () => {
+    activeCat = btn.dataset.cat;
+    document.querySelectorAll('.cat-link').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderGrid();
+  });
+});
+
+// ── Price Filter ──
+document.querySelectorAll('.price-link').forEach(btn => {
+  btn.addEventListener('click', () => {
+    priceMin = parseFloat(btn.dataset.min || 0);
+    priceMax = parseFloat(btn.dataset.max || Infinity);
+    renderGrid();
+  });
+});
+
+// ── Search ──
+searchInput.addEventListener('input', renderGrid);
+
+// ── Sort ──
+sortSelect.addEventListener('change', renderGrid);
+
+// ── Reset ──
+window.resetAll = function() {
+  activeCat = 'All';
+  priceMin = 0;
+  priceMax = Infinity;
+  searchInput.value = '';
+  document.querySelectorAll('.cat-link').forEach(b => b.classList.remove('active'));
+  document.querySelector('.cat-link[data-cat="All"]').classList.add('active');
+  sortSelect.value = 'default';
+  renderGrid();
+};
+
+// ── Quick Add ──
+window.quickAdd = function(id, name, price, image) {
+  if (window.CartSystem) {
+    window.CartSystem.addItem({ id, name, price, quantity: 1, image, attributes: { size: 'Default' } });
+  }
+};
+
+// ── Cart Badge ──
+function updateBadge() {
+  const cart = JSON.parse(localStorage.getItem('printing_ustad_cart') || '[]');
+  document.getElementById('cart-badge').textContent = cart.reduce((s,i) => s + i.quantity, 0);
+}
+updateBadge();
+window.addEventListener('cartUpdated', updateBadge);
+
+// Initial render
+renderGrid();
+})();
+</script>
+</body>
+</html>

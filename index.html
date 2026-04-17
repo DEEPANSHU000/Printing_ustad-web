@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Printing Ustad | Custom Printing Services Online</title>
+<meta name="description" content="Printing Ustad is India's premium custom printing service. T-shirts, mugs, visiting cards, diaries, bottles and more."/>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
+<style>
+  * { font-family: 'Inter', sans-serif; }
+  .hero-slide { display: none; }
+  .hero-slide.active { display: block; }
+  .tab-content { display: none; }
+  .tab-content.active { display: flex; }
+  .pill-scroll::-webkit-scrollbar { display: none; }
+  .product-card:hover .card-overlay { opacity: 1; transform: translateY(0); }
+  .card-overlay { opacity: 0; transform: translateY(100%); transition: all 0.3s ease; }
+  .nav-dropdown { display: none; }
+  .nav-item:hover .nav-dropdown { display: block; }
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body class="bg-white text-gray-800">
+
+<!-- Top Bar -->
+<div class="bg-purple-950 text-purple-100 text-xs py-2 px-4">
+  <div class="max-w-7xl mx-auto flex items-center justify-between">
+    <span class="hidden md:block">🇮🇳 India's Trusted Custom Printing Platform</span>
+    <div class="flex items-center gap-6">
+      <a href="tel:9876543210" class="flex items-center gap-1 hover:text-yellow-400 transition-colors">
+        <span class="material-symbols-outlined text-sm">call</span> 98765 43210
+      </a>
+      <a href="mailto:support@printingustad.com" class="flex items-center gap-1 hover:text-yellow-400 transition-colors">
+        <span class="material-symbols-outlined text-sm">mail</span> support@printingustad.com
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Navbar -->
+<header class="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-purple-100 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-4">
+    <!-- Logo -->
+    <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
+      <img src="logo.png" alt="Printing Ustad" class="h-10 w-auto object-contain">
+      <span class="font-bold text-xl text-gray-900 hidden sm:block">Printing Ustad</span>
+    </a>
+
+    <!-- Search -->
+    <div class="flex-1 max-w-xl mx-auto">
+      <div class="relative">
+        <input type="text" placeholder="Search for products..." class="w-full border border-gray-300 rounded-full py-2 pl-4 pr-10 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"/>
+        <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-purple-600">
+          <span class="material-symbols-outlined text-xl">search</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Nav Actions -->
+    <div class="flex items-center gap-3 flex-shrink-0">
+      <a href="info.html" class="hidden md:flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900">
+        <span class="material-symbols-outlined text-xl">person</span>
+        <span class="hidden lg:block">Login</span>
+      </a>
+      <a href="cart.html" class="relative flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900">
+        <span class="material-symbols-outlined text-xl">shopping_cart</span>
+        <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+        <span class="hidden lg:block">Cart</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Category Nav -->
+  <div class="border-t border-gray-100 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center gap-6 overflow-x-auto py-2 text-sm font-medium text-gray-700 pill-scroll">
+        <a href="shop.html" class="whitespace-nowrap hover:text-purple-600 transition-colors">All Products</a>
+        <a href="shop.html" class="whitespace-nowrap hover:text-purple-600 transition-colors">T-Shirts & Apparel</a>
+        <a href="shop.html" class="whitespace-nowrap hover:text-purple-600 transition-colors">Mugs & Bottles</a>
+        <a href="shop.html" class="whitespace-nowrap hover:text-purple-600 transition-colors">Visiting Cards</a>
+        <a href="shop.html" class="whitespace-nowrap hover:text-purple-600 transition-colors">Diaries & Notebooks</a>
+        <a href="shop.html" class="whitespace-nowrap hover:text-purple-600 transition-colors">Stickers & Labels</a>
+        <a href="shop.html" class="whitespace-nowrap hover:text-purple-600 transition-colors">Photo Gifts</a>
+        <a href="shop.html" class="whitespace-nowrap hover:text-purple-600 transition-colors">Calendars</a>
+        <a href="shop.html" class="whitespace-nowrap hover:text-purple-600 transition-colors">Corporate Kits</a>
+        <a href="customizer.html" class="whitespace-nowrap text-purple-600 font-semibold hover:underline transition-colors">✦ Design Studio</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Hero Banner Slider -->
+<section class="bg-gray-100 overflow-hidden">
+  <div class="relative">
+    <!-- Slide 1 -->
+    <div class="hero-slide active relative h-64 md:h-96 lg:h-[480px] bg-gradient-to-r from-purple-900 to-purple-700 flex items-center">
+      <img src="https://img-srv.arcprint.com/adpsSTG/category/1774075905173_290.jpg/full/1920,/0/default.webp" class="absolute inset-0 w-full h-full object-cover opacity-40" alt="T-Shirts"/>
+      <div class="relative z-10 max-w-7xl mx-auto px-8 text-white">
+        <p class="text-sm uppercase tracking-widest mb-2 opacity-80">Premium Quality</p>
+        <h2 class="text-4xl md:text-6xl font-bold leading-tight mb-4">Custom<br/>T-Shirts</h2>
+        <p class="text-lg opacity-80 mb-6">Starting at ₹399 | Min. 1 piece</p>
+        <a href="shop.html"><button class="bg-white text-purple-900 font-bold px-8 py-3 rounded-full hover:bg-yellow-400 hover:text-black transition-all">Order Now</button></a>
+      </div>
+    </div>
+    <!-- Slide 2 -->
+    <div class="hero-slide relative h-64 md:h-96 lg:h-[480px] bg-gradient-to-r from-orange-900 to-red-700 flex items-center">
+      <img src="https://img-srv.arcprint.com/adpsSTG/category/1687877530935_150.jpg/full/1920,/0/default.webp" class="absolute inset-0 w-full h-full object-cover opacity-40" alt="Mugs"/>
+      <div class="relative z-10 max-w-7xl mx-auto px-8 text-white">
+        <p class="text-sm uppercase tracking-widest mb-2 opacity-80">Personalized</p>
+        <h2 class="text-4xl md:text-6xl font-bold leading-tight mb-4">Custom<br/>Photo Mugs</h2>
+        <p class="text-lg opacity-80 mb-6">Starting at ₹230 | Min. 1 piece</p>
+        <a href="shop.html"><button class="bg-white text-orange-900 font-bold px-8 py-3 rounded-full hover:bg-yellow-400 hover:text-black transition-all">Order Now</button></a>
+      </div>
+    </div>
+    <!-- Slide 3 -->
+    <div class="hero-slide relative h-64 md:h-96 lg:h-[480px] bg-gradient-to-r from-green-900 to-teal-700 flex items-center">
+      <img src="https://img-srv.arcprint.com/adpsSTG/category/1681901382671_191.jpg/full/1920,/0/default.webp" class="absolute inset-0 w-full h-full object-cover opacity-40" alt="Bottles"/>
+      <div class="relative z-10 max-w-7xl mx-auto px-8 text-white">
+        <p class="text-sm uppercase tracking-widest mb-2 opacity-80">Bulk Orders Welcome</p>
+        <h2 class="text-4xl md:text-6xl font-bold leading-tight mb-4">Custom<br/>Water Bottles</h2>
+        <p class="text-lg opacity-80 mb-6">Starting at ₹325 | Min. 1 piece</p>
+        <a href="shop.html"><button class="bg-white text-green-900 font-bold px-8 py-3 rounded-full hover:bg-yellow-400 hover:text-black transition-all">Order Now</button></a>
+      </div>
+    </div>
+    <!-- Slide 4 -->
+    <div class="hero-slide relative h-64 md:h-96 lg:h-[480px] bg-gradient-to-r from-purple-900 to-indigo-700 flex items-center">
+      <img src="https://img-srv.arcprint.com/adpsSTG/category/1687872720138_892.jpg/full/1920,/0/default.webp" class="absolute inset-0 w-full h-full object-cover opacity-40" alt="Frames"/>
+      <div class="relative z-10 max-w-7xl mx-auto px-8 text-white">
+        <p class="text-sm uppercase tracking-widest mb-2 opacity-80">Perfect Gift</p>
+        <h2 class="text-4xl md:text-6xl font-bold leading-tight mb-4">Acrylic<br/>Photo Frames</h2>
+        <p class="text-lg opacity-80 mb-6">Starting at ₹450 | Min. 1 piece</p>
+        <a href="shop.html"><button class="bg-white text-purple-900 font-bold px-8 py-3 rounded-full hover:bg-yellow-400 hover:text-black transition-all">Order Now</button></a>
+      </div>
+    </div>
+    <!-- Controls -->
+    <button id="prev-slide" class="absolute left-6 top-1/2 -translate-y-1/2 bg-white/60 backdrop-blur hover:bg-white rounded-xl w-12 h-12 flex items-center justify-center shadow-lg z-20 transition-all">
+      <span class="material-symbols-outlined text-purple-900">arrow_back</span>
+    </button>
+    <button id="next-slide" class="absolute right-6 top-1/2 -translate-y-1/2 bg-white/60 backdrop-blur hover:bg-white rounded-xl w-12 h-12 flex items-center justify-center shadow-lg z-20 transition-all">
+      <span class="material-symbols-outlined text-purple-900">arrow_forward</span>
+    </button>
+    <!-- Dots -->
+    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+      <button class="slide-dot w-2 h-2 rounded-full bg-white/60 active:bg-white" data-idx="0"></button>
+      <button class="slide-dot w-2 h-2 rounded-full bg-white/60" data-idx="1"></button>
+      <button class="slide-dot w-2 h-2 rounded-full bg-white/60" data-idx="2"></button>
+      <button class="slide-dot w-2 h-2 rounded-full bg-white/60" data-idx="3"></button>
+    </div>
+  </div>
+</section>
+
+<!-- Category Pills -->
+<section class="bg-white py-6 border-b border-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="flex gap-4 overflow-x-auto pill-scroll pb-2">
+      <!-- Category items -->
+      <a href="shop.html" class="flex flex-col items-center gap-2 flex-shrink-0 group">
+        <div class="w-16 h-16 md:w-24 md:h-24 rounded-xl p-2 bg-purple-50 hover:bg-purple-100 border border-purple-100 group-hover:border-purple-300 transition-all">
+          <img src="https://img-srv.arcprint.com/adpsSTG/category/1725621346185_454.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover" alt="Corporate Gifts"/>
+        </div>
+        <span class="text-xs font-medium text-gray-700 whitespace-nowrap">Corporate Gifts</span>
+      </a>
+      <a href="shop.html" class="flex flex-col items-center gap-2 flex-shrink-0 group">
+        <div class="w-16 h-16 md:w-24 md:h-24 rounded-xl p-2 bg-purple-50 hover:bg-purple-100 border border-purple-100 group-hover:border-purple-300 transition-all">
+          <img src="https://img-srv.arcprint.com/adpsSTG/category/1774075905173_290.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover" alt="Apparels"/>
+        </div>
+        <span class="text-xs font-medium text-gray-700 whitespace-nowrap">Apparels</span>
+      </a>
+      <a href="shop.html" class="flex flex-col items-center gap-2 flex-shrink-0 group">
+        <div class="w-16 h-16 md:w-24 md:h-24 rounded-xl p-2 bg-purple-50 hover:bg-purple-100 border border-purple-100 group-hover:border-purple-300 transition-all">
+          <img src="https://img-srv.arcprint.com/adpsSTG/category/1687877530935_150.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover" alt="Mugs"/>
+        </div>
+        <span class="text-xs font-medium text-gray-700 whitespace-nowrap">Custom Mugs</span>
+      </a>
+      <a href="shop.html" class="flex flex-col items-center gap-2 flex-shrink-0 group">
+        <div class="w-16 h-16 md:w-24 md:h-24 rounded-xl p-2 bg-purple-50 hover:bg-purple-100 border border-purple-100 group-hover:border-purple-300 transition-all">
+          <img src="https://img-srv.arcprint.com/adpsSTG/category/1687872720138_892.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover" alt="Photo Gifts"/>
+        </div>
+        <span class="text-xs font-medium text-gray-700 whitespace-nowrap">Photo Gifts</span>
+      </a>
+      <a href="shop.html" class="flex flex-col items-center gap-2 flex-shrink-0 group">
+        <div class="w-16 h-16 md:w-24 md:h-24 rounded-xl p-2 bg-purple-50 hover:bg-purple-100 border border-purple-100 group-hover:border-purple-300 transition-all">
+          <img src="https://img-srv.arcprint.com/adpsSTG/category/1681901382671_191.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover" alt="Water Bottles"/>
+        </div>
+        <span class="text-xs font-medium text-gray-700 whitespace-nowrap">Water Bottles</span>
+      </a>
+      <a href="shop.html" class="flex flex-col items-center gap-2 flex-shrink-0 group">
+        <div class="w-16 h-16 md:w-24 md:h-24 rounded-xl p-2 bg-purple-50 hover:bg-purple-100 border border-purple-100 group-hover:border-purple-300 transition-all">
+          <img src="https://img-srv.arcprint.com/adpsSTG/category/1678351724818_367.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover" alt="Visiting Cards"/>
+        </div>
+        <span class="text-xs font-medium text-gray-700 whitespace-nowrap">Visiting Cards</span>
+      </a>
+      <a href="shop.html" class="flex flex-col items-center gap-2 flex-shrink-0 group">
+        <div class="w-16 h-16 md:w-24 md:h-24 rounded-xl p-2 bg-purple-50 hover:bg-purple-100 border border-purple-100 group-hover:border-purple-300 transition-all">
+          <img src="https://img-srv.arcprint.com/adpsSTG/category/1720882534503_377.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover" alt="Diaries"/>
+        </div>
+        <span class="text-xs font-medium text-gray-700 whitespace-nowrap">Diaries</span>
+      </a>
+      <a href="shop.html" class="flex flex-col items-center gap-2 flex-shrink-0 group">
+        <div class="w-16 h-16 md:w-24 md:h-24 rounded-xl p-2 bg-purple-50 hover:bg-purple-100 border border-purple-100 group-hover:border-purple-300 transition-all">
+          <img src="https://img-srv.arcprint.com/adpsSTG/category/1761832333077_818.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover" alt="Calendars"/>
+        </div>
+        <span class="text-xs font-medium text-gray-700 whitespace-nowrap">Calendars</span>
+      </a>
+      <a href="shop.html" class="flex flex-col items-center gap-2 flex-shrink-0 group">
+        <div class="w-16 h-16 md:w-24 md:h-24 rounded-xl p-2 bg-purple-50 hover:bg-purple-100 border border-purple-100 group-hover:border-purple-300 transition-all">
+          <img src="https://img-srv.arcprint.com/adpsSTG/category/1687874765305_638.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover" alt="Wooden Frames"/>
+        </div>
+        <span class="text-xs font-medium text-gray-700 whitespace-nowrap">Wooden Frames</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Product Tabs -->
+<section class="py-10 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl md:text-3xl font-semibold text-gray-900">Curated Picks Just for You!</h2>
+      <a href="shop.html" class="text-purple-600 text-sm font-medium hover:underline flex items-center gap-1">
+        View all <span class="material-symbols-outlined text-sm">arrow_forward</span>
+      </a>
+    </div>
+    <!-- Tab Buttons -->
+    <div class="flex gap-2 mb-6 border-b border-gray-200">
+      <button class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-purple-600 text-purple-600" data-tab="seasonal">Seasonal Specials</button>
+      <button class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-800" data-tab="bestseller">Best Sellers</button>
+      <button class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-800" data-tab="trending">Customer Favorites</button>
+    </div>
+
+    <!-- Seasonal -->
+    <div id="tab-seasonal" class="tab-content active grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <!-- Product cards generated by JS -->
+    </div>
+    <!-- Best Sellers -->
+    <div id="tab-bestseller" class="tab-content grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+    <!-- Trending -->
+    <div id="tab-trending" class="tab-content grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+  </div>
+</section>
+
+<!-- Branding Banner -->
+<section class="py-10 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="relative rounded-2xl overflow-hidden h-64 md:h-96 bg-gradient-to-r from-gray-900 to-gray-700">
+      <img src="https://img-srv.arcprint.com/adpsSTG/category/1720882568777_772.jpg/full/1920,/0/default.webp" class="absolute inset-0 w-full h-full object-cover opacity-30" alt="Branding"/>
+      <div class="absolute inset-0 flex flex-col md:flex-row items-center justify-between px-10 py-8">
+        <div class="text-white text-center md:text-left">
+          <p class="text-xs uppercase tracking-widest mb-3 opacity-70">Offer valid till 31st Dec, 2026</p>
+          <h2 class="text-3xl md:text-5xl font-bold leading-tight">Turn Everyday<br/>Into A Branding<br/>Moment</h2>
+        </div>
+        <div class="text-white text-center mt-4 md:mt-0">
+          <h3 class="text-4xl md:text-5xl font-bold mb-2">20% off</h3>
+          <p class="text-lg font-light mb-6 opacity-80">on our Personal Diary</p>
+          <a href="shop.html">
+            <button class="bg-white text-red-600 px-8 py-3 rounded-full font-semibold hover:bg-red-600 hover:text-white transition-all uppercase tracking-wide text-sm">Order Now</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Buy More Save More -->
+<section class="py-10 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <h2 class="text-2xl md:text-3xl font-semibold text-center mb-6">Scale Your Order, Maximize Savings</h2>
+    <div class="flex flex-col lg:flex-row gap-4">
+      <!-- Big Card -->
+      <a href="shop.html" class="relative rounded-2xl overflow-hidden flex-1 lg:max-w-[45%] block group">
+        <img src="https://img-srv.arcprint.com/adpsSTG/category/1687877530935_150.jpg/full/600,600/0/default.webp" class="w-full aspect-square object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500" alt="Buy More Save More"/>
+        <div class="absolute top-0 left-0 p-6 text-white">
+          <h3 class="text-4xl md:text-5xl font-bold leading-tight">Buy More.<br/>Save More</h3>
+          <p class="text-lg opacity-80 mt-2 hidden md:block">Volume discounts on all orders!</p>
+          <span class="mt-4 inline-block bg-red-600 text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-red-700">Order Now</span>
+        </div>
+      </a>
+      <!-- Right Grid -->
+      <div class="flex flex-col flex-1 gap-4">
+        <a href="shop.html" class="relative rounded-2xl overflow-hidden block group">
+          <img src="https://img-srv.arcprint.com/adpsSTG/category/1725621346185_454.jpg/full/600,300/0/default.webp" class="w-full aspect-[2/1] object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500" alt="Custom Packaging"/>
+          <div class="absolute top-0 left-0 p-4 text-white">
+            <span class="bg-white/20 text-xs px-3 py-1 rounded-full">Corporate Kits</span>
+            <h3 class="text-xl md:text-2xl font-semibold mt-2 leading-tight">Shop Smart,<br/>Save Big!</h3>
+          </div>
+        </a>
+        <div class="flex gap-4 flex-1">
+          <a href="shop.html" class="relative rounded-2xl overflow-hidden flex-1 block group">
+            <img src="https://img-srv.arcprint.com/adpsSTG/category/1678351724818_367.jpg/full/300,300/0/default.webp" class="w-full aspect-square object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500" alt="Visiting Cards"/>
+            <div class="absolute top-0 left-0 p-3 text-gray-800">
+              <h4 class="text-base md:text-lg font-semibold leading-tight">More Cards,<br/>More Impact</h4>
+            </div>
+          </a>
+          <a href="shop.html" class="relative rounded-2xl overflow-hidden flex-1 block group">
+            <img src="https://img-srv.arcprint.com/adpsSTG/category/1725621427039_318.jpg/full/300,300/0/default.webp" class="w-full aspect-square object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500" alt="Diary Gift Set"/>
+            <div class="absolute top-0 left-0 p-3 text-white">
+              <h4 class="text-base md:text-lg font-semibold leading-tight">Refined.<br/>Ready. Gifted.</h4>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Explore Categories -->
+<section class="py-10 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl md:text-3xl font-semibold">Explore Our Categories</h2>
+      <a href="shop.html" class="text-purple-600 text-sm font-medium hover:underline flex items-center gap-1">View all <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <a href="shop.html" class="group rounded-2xl overflow-hidden relative block aspect-square">
+        <img src="https://img-srv.arcprint.com/adpsSTG/category/1687873327336_970.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Caps"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+          <span class="text-white font-semibold text-lg">Custom Caps</span>
+        </div>
+      </a>
+      <a href="shop.html" class="group rounded-2xl overflow-hidden relative block aspect-square">
+        <img src="https://img-srv.arcprint.com/adpsSTG/category/1733319874776_931.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Hoodies"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+          <span class="text-white font-semibold text-lg">Custom Hoodies</span>
+        </div>
+      </a>
+      <a href="shop.html" class="group rounded-2xl overflow-hidden relative block aspect-square">
+        <img src="https://img-srv.arcprint.com/adpsSTG/category/1765530043357_329.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Magic Mugs"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+          <span class="text-white font-semibold text-lg">Magic Mugs</span>
+        </div>
+      </a>
+      <a href="shop.html" class="group rounded-2xl overflow-hidden relative block aspect-square">
+        <img src="https://img-srv.arcprint.com/adpsSTG/category/1761832333077_818.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Calendars"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+          <span class="text-white font-semibold text-lg">Desk Calendars</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Business Needs -->
+<section class="py-10 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <h2 class="text-2xl md:text-3xl font-semibold text-center mb-8">Tailored to Your Unique Business Needs</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <a href="shop.html" class="group relative rounded-2xl overflow-hidden aspect-square block">
+        <img src="https://img-srv.arcprint.com/adpsSTG/category/1725621504589_922.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" alt="Startup"/>
+        <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex items-end p-4">
+          <span class="text-white font-bold text-base">Startup Business</span>
+        </div>
+      </a>
+      <a href="shop.html" class="group relative rounded-2xl overflow-hidden aspect-square block">
+        <img src="https://img-srv.arcprint.com/adpsSTG/category/1687872653926_751.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" alt="Events"/>
+        <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex items-end p-4">
+          <span class="text-white font-bold text-base">Events & Promotions</span>
+        </div>
+      </a>
+      <a href="shop.html" class="group relative rounded-2xl overflow-hidden aspect-square block">
+        <img src="https://img-srv.arcprint.com/adpsSTG/category/1687875115423_350.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" alt="Cafe"/>
+        <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex items-end p-4">
+          <span class="text-white font-bold text-base">Cafes & Restaurants</span>
+        </div>
+      </a>
+      <a href="shop.html" class="group relative rounded-2xl overflow-hidden aspect-square block">
+        <img src="https://img-srv.arcprint.com/adpsSTG/category/1725621346185_454.jpg/full/400,400/0/default.webp" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" alt="Employee"/>
+        <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex items-end p-4">
+          <span class="text-white font-bold text-base">Employee Engagement</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-10 bg-white border-t border-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <h2 class="text-2xl md:text-3xl font-semibold text-center mb-8">Experience Quality Like Never Before</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div class="flex flex-col items-center gap-3">
+        <div class="w-14 h-14 bg-purple-50 rounded-full flex items-center justify-center">
+          <span class="material-symbols-outlined text-purple-600 text-2xl">verified</span>
+        </div>
+        <h3 class="font-semibold text-gray-800">Premium Quality</h3>
+        <p class="text-sm text-gray-500">ISO certified printing with precision guarantee</p>
+      </div>
+      <div class="flex flex-col items-center gap-3">
+        <div class="w-14 h-14 bg-green-50 rounded-full flex items-center justify-center">
+          <span class="material-symbols-outlined text-green-600 text-2xl">local_shipping</span>
+        </div>
+        <h3 class="font-semibold text-gray-800">Fast Delivery</h3>
+        <p class="text-sm text-gray-500">3-5 business day turnaround across India</p>
+      </div>
+      <div class="flex flex-col items-center gap-3">
+        <div class="w-14 h-14 bg-orange-50 rounded-full flex items-center justify-center">
+          <span class="material-symbols-outlined text-orange-600 text-2xl">payments</span>
+        </div>
+        <h3 class="font-semibold text-gray-800">Best Prices</h3>
+        <p class="text-sm text-gray-500">Bulk discounts with no minimum MOQ on many products</p>
+      </div>
+      <div class="flex flex-col items-center gap-3">
+        <div class="w-14 h-14 bg-purple-50 rounded-full flex items-center justify-center">
+          <span class="material-symbols-outlined text-purple-600 text-2xl">support_agent</span>
+        </div>
+        <h3 class="font-semibold text-gray-800">24/7 Support</h3>
+        <p class="text-sm text-gray-500">Dedicated support via chat, call and email</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-50 pt-12 pb-6 border-t border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 mb-10">
+      <!-- Brand Col -->
+      <div class="col-span-2 md:col-span-3 lg:col-span-1">
+        <div class="flex items-center gap-2 mb-4">
+          <img src="logo.png" alt="Printing Ustad" class="h-10 w-auto object-contain">
+          <span class="font-bold text-lg text-gray-900">Printing Ustad</span>
+        </div>
+        <p class="text-sm text-gray-500 leading-relaxed mb-4">India's trusted custom printing platform for businesses, creators and individuals.</p>
+        <div class="flex gap-3">
+          <a href="https://facebook.com" target="_blank" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-purple-600 hover:text-white transition-all">
+            <span class="text-xs font-bold">f</span>
+          </a>
+          <a href="https://instagram.com" target="_blank" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-pink-600 hover:text-white transition-all">
+            <span class="text-xs font-bold">in</span>
+          </a>
+          <a href="https://twitter.com" target="_blank" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-purple-400 hover:text-white transition-all">
+            <span class="text-xs font-bold">tw</span>
+          </a>
+        </div>
+      </div>
+      <!-- Quick Links -->
+      <div>
+        <h4 class="font-bold text-gray-900 mb-4 text-sm">Quick Links</h4>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li><a href="shop.html" class="hover:text-gray-900">T-Shirts & Hoodies</a></li>
+          <li><a href="shop.html" class="hover:text-gray-900">Custom Mugs</a></li>
+          <li><a href="shop.html" class="hover:text-gray-900">Visiting Cards</a></li>
+          <li><a href="shop.html" class="hover:text-gray-900">Photo Frames</a></li>
+          <li><a href="shop.html" class="hover:text-gray-900">Water Bottles</a></li>
+        </ul>
+      </div>
+      <!-- Categories -->
+      <div>
+        <h4 class="font-bold text-gray-900 mb-4 text-sm">Categories</h4>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li><a href="shop.html" class="hover:text-gray-900">Corporate Gifts</a></li>
+          <li><a href="shop.html" class="hover:text-gray-900">Caps & Accessories</a></li>
+          <li><a href="shop.html" class="hover:text-gray-900">Stationery</a></li>
+          <li><a href="shop.html" class="hover:text-gray-900">Photo Gifts</a></li>
+          <li><a href="shop.html" class="hover:text-gray-900">Calendars 2026</a></li>
+        </ul>
+      </div>
+      <!-- Products -->
+      <div>
+        <h4 class="font-bold text-gray-900 mb-4 text-sm">Products</h4>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li><a href="shop.html" class="hover:text-gray-900">All Products</a></li>
+          <li><a href="shop.html" class="hover:text-gray-900">Best Sellers</a></li>
+          <li><a href="shop.html" class="hover:text-gray-900">New Arrivals</a></li>
+          <li><a href="customizer.html" class="hover:text-gray-900">Design Studio</a></li>
+          <li><a href="shop.html" class="hover:text-gray-900">Bulk Orders</a></li>
+        </ul>
+      </div>
+      <!-- Company -->
+      <div>
+        <h4 class="font-bold text-gray-900 mb-4 text-sm">Company</h4>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li><a href="info.html#about" class="hover:text-gray-900">About Us</a></li>
+          <li><a href="info.html#contact" class="hover:text-gray-900">Contact Us</a></li>
+          <li><a href="info.html#shipping" class="hover:text-gray-900">Shipping Policy</a></li>
+          <li><a href="info.html#returns" class="hover:text-gray-900">Returns & Refund</a></li>
+          <li><a href="info.html#privacy" class="hover:text-gray-900">Privacy Policy</a></li>
+          <li><a href="info.html#terms" class="hover:text-gray-900">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Location Strip -->
+    <div class="py-4 border-t border-gray-200 border-b border-gray-200 mb-4">
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
+        <span class="font-medium text-gray-700 mr-2">We deliver to:</span>
+        <span>Mumbai</span><span class="text-gray-300">|</span>
+        <span>Delhi</span><span class="text-gray-300">|</span>
+        <span>Bengaluru</span><span class="text-gray-300">|</span>
+        <span>Hyderabad</span><span class="text-gray-300">|</span>
+        <span>Chennai</span><span class="text-gray-300">|</span>
+        <span>Kolkata</span><span class="text-gray-300">|</span>
+        <span>Pune</span><span class="text-gray-300">|</span>
+        <span>Jaipur</span><span class="text-gray-300">|</span>
+        <span>Ahmedabad</span><span class="text-gray-300">|</span>
+        <span>+ All India</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+      <p>© 2026 Printing Ustad. All rights reserved.</p>
+      <div class="flex items-center gap-4">
+        <a href="info.html#privacy" class="hover:text-gray-900">Privacy Policy</a>
+        <a href="info.html#terms" class="hover:text-gray-900">Terms of Use</a>
+        <a href="info.html#contact" class="hover:text-gray-900">Support</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+// ── Product Data (ArcPrint real images + INR prices) ──
+const products = {
+  seasonal: [
+    { id:'tshirt-rn', name:'Round Neck T-Shirts', price:399, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1774075905173_290.jpg/full/400,400/0/default.webp' },
+    { id:'polo-ts', name:'Polo T-Shirts', price:650, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1774075758039_237.jpg/full/400,400/0/default.webp' },
+    { id:'desk-cal', name:'Desk Calendars', price:270, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1761832333077_818.jpg/full/400,400/0/default.webp' },
+    { id:'wall-cal', name:'Wall Calendars', price:20, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1761832262857_830.jpg/full/400,400/0/default.webp' },
+    { id:'hoodie', name:'Custom Hoodies', price:1265, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1733319874776_931.jpg/full/400,400/0/default.webp' },
+  ],
+  bestseller: [
+    { id:'photo-cup', name:'Photo Cup', price:230, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1687877530935_150.jpg/full/400,400/0/default.webp' },
+    { id:'acrylic-frame', name:'Acrylic Photo Frames', price:450, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1687872720138_892.jpg/full/400,400/0/default.webp' },
+    { id:'led-bottle', name:'LED Temp Water Bottle', price:549, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/water-bottle-in-type-4.jpg/full/400,400/0/default.webp' },
+    { id:'pen-gold', name:'Pen with Golden Touch', price:58, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1678351724818_367.jpg/full/400,400/0/default.webp' },
+    { id:'luxury-diary', name:'Luxury Diary & Pen Set', price:675, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1725621427039_318.jpg/full/400,400/0/default.webp' },
+  ],
+  trending: [
+    { id:'acrylic-clock', name:'Acrylic Clocks', price:999, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1687872653926_751.jpg/full/400,400/0/default.webp' },
+    { id:'keychain', name:'Keychains', price:120, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1687874976160_151.jpg/full/400,400/0/default.webp' },
+    { id:'magic-mug', name:'Magic Mugs', price:350, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1765530043357_329.jpg/full/400,400/0/default.webp' },
+    { id:'mousepad-cal', name:'Mouse Pad Calendars', price:170, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1761832422386_191.jpg/full/400,400/0/default.webp' },
+    { id:'wood-frame', name:'Wooden Photo Frames', price:800, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1687874765305_638.jpg/full/400,400/0/default.webp' },
+  ]
+};
+
+function renderProducts(tab) {
+  const container = document.getElementById('tab-' + tab);
+  container.innerHTML = products[tab].map(p => `
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all group overflow-hidden">
+      <div class="relative overflow-hidden aspect-square bg-gray-50">
+        <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+        <div class="card-overlay absolute bottom-0 left-0 right-0 bg-white/95 py-2 px-3 flex gap-2">
+          <button onclick="quickAdd('${p.id}','${p.name}',${p.price},'${p.img}')" class="flex-1 bg-purple-600 text-white text-xs font-semibold py-1.5 rounded-lg hover:bg-purple-700 transition-colors">Add to Cart</button>
+          <a href="product.html" class="flex-1 border border-purple-600 text-purple-600 text-xs font-semibold py-1.5 rounded-lg text-center hover:bg-purple-50 transition-colors">Customize</a>
+        </div>
+      </div>
+      <div class="p-3">
+        <h3 class="text-sm font-medium text-gray-800 leading-tight mb-1">${p.name}</h3>
+        <p class="text-purple-700 font-bold text-sm">₹${p.price.toLocaleString('en-IN')}</p>
+        <p class="text-xs text-gray-400">Min. qty: ${p.minQty}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Render all tabs
+['seasonal','bestseller','trending'].forEach(renderProducts);
+
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('border-purple-600','text-purple-600');
+      b.classList.add('border-transparent','text-gray-500');
+    });
+    btn.classList.add('border-purple-600','text-purple-600');
+    btn.classList.remove('border-transparent','text-gray-500');
+
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ── Hero Slider ──
+let currentSlide = 0;
+const slides = document.querySelectorAll('.hero-slide');
+const dots = document.querySelectorAll('.slide-dot');
+
+function goToSlide(n) {
+  slides[currentSlide].classList.remove('active');
+  dots[currentSlide].classList.remove('bg-white');
+  dots[currentSlide].classList.add('bg-white/60');
+  currentSlide = (n + slides.length) % slides.length;
+  slides[currentSlide].classList.add('active');
+  dots[currentSlide].classList.add('bg-white');
+  dots[currentSlide].classList.remove('bg-white/60');
+}
+
+document.getElementById('next-slide').addEventListener('click', () => goToSlide(currentSlide + 1));
+document.getElementById('prev-slide').addEventListener('click', () => goToSlide(currentSlide - 1));
+dots.forEach(dot => dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.idx))));
+
+let autoPlay = setInterval(() => goToSlide(currentSlide + 1), 4000);
+document.querySelector('.relative').addEventListener('mouseenter', () => clearInterval(autoPlay));
+document.querySelector('.relative').addEventListener('mouseleave', () => { autoPlay = setInterval(() => goToSlide(currentSlide + 1), 4000); });
+
+// ── Quick Add ──
+function quickAdd(id, name, price, image) {
+  if (window.CartSystem) {
+    window.CartSystem.addItem({ id, name, price, quantity: 1, image, attributes: { size: 'Default' } });
+  }
+}
+
+// ── Cart Badge ──
+function updateBadge() {
+  const cart = JSON.parse(localStorage.getItem('printing_ustad_cart') || '[]');
+  const total = cart.reduce((s, i) => s + i.quantity, 0);
+  document.getElementById('cart-badge').textContent = total;
+}
+updateBadge();
+window.addEventListener('cartUpdated', updateBadge);
+</script>
+</body>
+</html>

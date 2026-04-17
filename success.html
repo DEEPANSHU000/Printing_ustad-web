@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Order Confirmed | Printing Ustad</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f6f6f6",
+                        "secondary": "#d3fbff",
+                        "secondary-container": "#00eefc",
+                        "surface": "#131313",
+                        "surface-container": "#201f1f",
+                        "surface-container-high": "#2a2a2a",
+                        "on-surface": "#e5e2e1",
+                        "on-surface-variant": "#b9cacb"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #131313; color: #e5e2e1; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen">
+    <!-- TopNavBar -->
+    <nav class="fixed top-0 w-full z-50 bg-[#131313]/60 backdrop-blur-xl border-b border-white/10 h-20 flex items-center px-8 shadow-[0_0_40px_rgba(0,240,255,0.06)]">
+        <div class="flex items-center justify-between w-full max-w-[1440px] mx-auto">
+            <div class="flex items-center gap-12">
+                <a href="index.html" class="flex items-center gap-4 group">
+                    <div class="h-16 w-16 transition-all duration-300 group-hover:scale-110 flex items-center justify-center">
+                        <img src="logo.png" alt="Printing Ustad" class="h-full w-full object-contain filter drop-shadow-[0_0_15px_rgba(0,240,255,0.5)] brightness-110 mix-blend-screen">
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-2xl font-bold tracking-tighter text-neutral-50 font-headline leading-none">Printing Ustad</span>
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-cyan-400 font-bold mt-1 opacity-80">Premium Studio</span>
+                    </div>
+                </a>
+                <div class="hidden md:flex items-center gap-8 text-sm font-bold">
+                    <a href="shop.html" class="text-neutral-400 hover:text-white transition-colors">Products</a>
+                    <a href="customizer.html" class="text-neutral-400 hover:text-white transition-colors">Custom Prints</a>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="shop.html" class="text-sm font-bold text-neutral-400 hover:text-white transition-colors">Continue Shopping</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-1 flex items-center justify-center p-6 pt-24">
+        <div class="max-w-[600px] w-full bg-surface-container-high rounded-3xl border border-white/5 p-12 text-center shadow-2xl relative overflow-hidden">
+            <!-- Glow effect -->
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-secondary-container/10 blur-[80px] rounded-full pointer-events-none"></div>
+            
+            <div class="relative z-10 flex flex-col items-center">
+                <div class="w-20 h-20 bg-secondary-container rounded-full flex items-center justify-center text-black mb-8 shadow-[0_0_30px_rgba(0,238,252,0.3)]">
+                    <span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                </div>
+                
+                <h1 class="text-4xl font-headline font-extrabold mb-4">Order Confirmed!</h1>
+                <p class="text-on-surface-variant text-lg mb-8 leading-relaxed max-w-[400px]">
+                    Your custom prints are heading to the studio. We've sent an email with your unique order ID and tracking details.
+                </p>
+                
+                <div class="bg-surface-container p-4 rounded-xl border border-white/5 mb-8 w-full">
+                    <p class="text-sm text-on-surface-variant">Order Number</p>
+                    <p class="font-mono text-xl font-bold text-primary tracking-widest mt-1" id="order-id">PU-XXXX-XXXX</p>
+                </div>
+                
+                <a href="index.html" class="w-full bg-primary text-black font-extrabold py-4 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-xl flex items-center justify-center">
+                    Return to Studio
+                </a>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        // Generate random order ID
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let id1 = ''; let id2 = '';
+        for(let i=0; i<4; i++) {
+            id1 += chars.charAt(Math.floor(Math.random() * chars.length));
+            id2 += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        document.getElementById('order-id').innerText = `PU-${id1}-${id2}`;
+        
+        // Ensure cart is cleared (backup to the cart.html logic)
+        localStorage.setItem('printing_ustad_cart', JSON.stringify([]));
+    </script>
+</body>
+</html>
