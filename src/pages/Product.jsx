@@ -1,52 +1,125 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { supabase } from '../supabaseClient';
+import CustomizationModal from '../components/CustomizationModal';
+
+const DEFAULT_IMAGE = "https://lh3.googleusercontent.com/aida-public/AB6AXuBxndXr1Tiq44IXDTrYXlCcx85etOMoB5xfTz0Sl91WBBQ6zf4TwGdOy2vsFGJDHLgAW-9NEmOft__ckYYCAHkW9E2sUJMjA-hSqkU2segQjKbilRJsywoapqKX97dFSp6gY17el2VKeOHpHRpJJIof8qXoqY4lmLuH9RbKDTJ_i6_8Y_qOpwISakMZ-vVPSOWVCQ6seGWJCMv95-MEIKbjZwcGaeCHJkDuS4vHUaYPoHRQW8rYoYQiVdMR5xu_OqXOWPaDRrInIeE";
 
 const Product = () => {
     const { id } = useParams();
     const { addItem } = useCart();
 
-    const [selectedColor, setSelectedColor] = useState('Pitch Black');
-    const [selectedSize, setSelectedSize] = useState('M');
+    const [product, setProduct] = useState(null);
+    const [variants, setVariants] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const [selectedVariant, setSelectedVariant] = useState(null);
+    const [selectedColor, setSelectedColor] = useState(null);
+    const [selectedSize, setSelectedSize] = useState(null);
     const [quantity, setQuantity] = useState(1);
-    const [mainImage, setMainImage] = useState("https://lh3.googleusercontent.com/aida-public/AB6AXuBxndXr1Tiq44IXDTrYXlCcx85etOMoB5xfTz0Sl91WBBQ6zf4TwGdOy2vsFGJDHLgAW-9NEmOft__ckYYCAHkW9E2sUJMjA-hSqkU2segQjKbilRJsywoapqKX97dFSp6gY17el2VKeOHpHRpJJIof8qXoqY4lmLuH9RbKDTJ_i6_8Y_qOpwISakMZ-vVPSOWVCQ6seGWJCMv95-MEIKbjZwcGaeCHJkDuS4vHUaYPoHRQW8rYoYQiVdMR5xu_OqXOWPaDRrInIeE");
+    const [mainImage, setMainImage] = useState(DEFAULT_IMAGE);
     const [btnState, setBtnState] = useState('default');
+    const navigate = useNavigate();
+    const [showCustomizer, setShowCustomizer] = useState(false);
 
-    const swatches = [
-        { color: 'Pitch Black', bg: 'bg-black', img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBxndXr1Tiq44IXDTrYXlCcx85etOMoB5xfTz0Sl91WBBQ6zf4TwGdOy2vsFGJDHLgAW-9NEmOft__ckYYCAHkW9E2sUJMjA-hSqkU2segQjKbilRJsywoapqKX97dFSp6gY17el2VKeOHpHRpJJIof8qXoqY4lmLuH9RbKDTJ_i6_8Y_qOpwISakMZ-vVPSOWVCQ6seGWJCMv95-MEIKbjZwcGaeCHJkDuS4vHUaYPoHRQW8rYoYQiVdMR5xu_OqXOWPaDRrInIeE" },
-        { color: 'Slate Gray', bg: 'bg-neutral-600', img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCn8c7TnEy7eoGpF06Gutb_0l9pq7CqQKIlo_f8NauDAvos-IlUNk90TPv2rxscv-NlGlbEKNZO5qQMayBvPbmwtsvNZxuzB2EY1_YXss3W4zu5pEGsxoShZEpSRLXSY5KnNAZga-ZJdFn58-MAmwx3B5XOiw9oNJDeA5A7JKkHEoPB87-FxhIHgsJAWy8cTr7swG2rUPKv0CW1sz1BRoFjx4zwBpCmN4Pt4jJf6gtadoAGiHvCfYH4AG8yZHvbKhemBcem70rPd2Q" }
-    ];
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                if (!supabase) throw new Error("Supabase not initialized");
 
-    const sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+                const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id);
 
-    const handleAddToCart = () => {
-        addItem({
-            id: id || 'premium-tee-001',
-            name: `Premium Studio Tee (${selectedColor})`,
-            price: 399.00,
-            quantity: quantity,
-            image: mainImage,
-            attributes: { size: selectedSize, color: selectedColor }
-        });
-        
+                if (isUUID) {
+                    const [productRes, variantRes] = await Promise.all([
+                        supabase.from('products').select('*, categories(name)').eq('id', id).single(),
+                        supabase.from('product_variants').select('*').eq('product_id', id).order('created_at', { ascending: true })
+                    ]);
+
+                    if (productRes.data && !productRes.error) {
+                        const p = productRes.data;
+                        const productImg = p.base_image_url || DEFAULT_IMAGE;
+                        setProduct({ id: p.id, name: p.name, base_price: Number(p.base_price) || 0, desc: p.description || 'Premium quality custom printing product.', category: p.categories?.name || 'Products', img: productImg, minQty: p.min_order_quantity || 1 });
+                        setMainImage(productImg);
+                    }
+
+                    if (variantRes.data && !variantRes.error && variantRes.data.length > 0) {
+                        setVariants(variantRes.data);
+                        const first = variantRes.data[0];
+                        setSelectedVariant(first);
+                        setSelectedColor(first.color || null);
+                        setSelectedSize(first.size || null);
+                        if (first.image_url) setMainImage(first.image_url);
+                    }
+                    return;
+                }
+                navigate('/shop', { replace: true });
+            } catch (err) {
+                console.error("Product fetch error:", err);
+                setProduct({ id: id || 'item', name: 'Premium Studio Item', base_price: 399, desc: 'Custom premium printing product.', category: 'Apparel', img: DEFAULT_IMAGE, minQty: 1 });
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProduct();
+    }, [id]);
+
+    const uniqueColors = [...new Set(variants.map(v => v.color).filter(Boolean))];
+    const uniqueSizes  = [...new Set(variants.map(v => v.size).filter(Boolean))];
+
+    const handleColorSelect = (color) => {
+        setSelectedColor(color);
+        const match = variants.find(v => v.color === color && v.size === selectedSize) || variants.find(v => v.color === color);
+        if (match) { setSelectedVariant(match); setSelectedSize(match.size || null); if (match.image_url) setMainImage(match.image_url); }
+    };
+
+    const handleSizeSelect = (size) => {
+        setSelectedSize(size);
+        const match = variants.find(v => v.size === size && v.color === selectedColor) || variants.find(v => v.size === size);
+        if (match) setSelectedVariant(match);
+    };
+
+    const effectivePrice = product ? (product.base_price || 0) + (selectedVariant ? Number(selectedVariant.price_adjustment) || 0 : 0) : 0;
+    const stockQty = selectedVariant?.stock_quantity ?? null;
+    const isLowStock = stockQty !== null && stockQty > 0 && stockQty <= (selectedVariant?.low_stock_threshold ?? 10);
+    const isOutOfStock = stockQty !== null && stockQty === 0;
+
+    const handleAddToCart = (customizations = {}) => {
+        if (isOutOfStock) return;
+        addItem({ id: product.id, variantId: selectedVariant?.id || null, name: product.name, price: effectivePrice, quantity, image: customizations.previewUrl || mainImage, customDesignUrl: customizations.uploadedImageUrl || null, attributes: { ...(selectedColor ? { color: selectedColor } : {}), ...(selectedSize ? { size: selectedSize } : {}), ...(customizations.uploadedImageUrl ? { customDesign: '🎨 Custom' } : {}) }, customizations });
         setBtnState('added');
         setTimeout(() => setBtnState('default'), 2000);
     };
 
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-[#f7f5ff] via-white to-[#ede9fe] flex items-center justify-center">
+                <div className="flex flex-col items-center gap-3">
+                    <div className="w-10 h-10 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+                    <p className="text-gray-400 text-sm">Loading product...</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <div className="bg-[#131313] text-white min-h-screen pt-12 pb-20">
+        <div className="min-h-screen bg-gradient-to-br from-[#f7f5ff] via-white to-[#ede9fe] pt-10 pb-24">
+            {showCustomizer && product && (
+                <CustomizationModal
+                    product={product} selectedVariant={selectedVariant} selectedColor={selectedColor}
+                    selectedSize={selectedSize} quantity={quantity} effectivePrice={effectivePrice}
+                    onClose={() => setShowCustomizer(false)}
+                    onAddToCart={(customizationData) => { handleAddToCart(customizationData); setBtnState('added'); setTimeout(() => setBtnState('default'), 2000); }}
+                />
+            )}
             <div className="max-w-[1440px] mx-auto px-6 md:px-12">
                 <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-24">
                     {/* Left: Gallery */}
                     <div className="lg:col-span-7 space-y-4">
-                        <div className="aspect-[4/5] rounded-xl overflow-hidden bg-[#201f1f] relative group">
-                            <img 
-                                src={mainImage} 
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                                alt="Product" 
-                            />
+                        <div className="aspect-[4/5] rounded-3xl overflow-hidden bg-white shadow-2xl shadow-purple-100/60 relative group border border-purple-100">
+                            <img src={mainImage} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Product" />
                             <div className="absolute top-4 right-4">
-                                <span className="bg-[#3a3939]/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase border border-white/5">240 GSM</span>
+                                <span className="bg-white/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase border border-purple-100 text-purple-700 shadow">240 GSM</span>
                             </div>
                         </div>
                         <div className="grid grid-cols-4 gap-4">
@@ -56,11 +129,8 @@ const Product = () => {
                                 "https://lh3.googleusercontent.com/aida-public/AB6AXuCn8c7TnEy7eoGpF06Gutb_0l9pq7CqQKIlo_f8NauDAvos-IlUNk90TPv2rxscv-NlGlbEKNZO5qQMayBvPbmwtsvNZxuzB2EY1_YXss3W4zu5pEGsxoShZEpSRLXSY5KnNAZga-ZJdFn58-MAmwx3B5XOiw9oNJDeA5A7JKkHEoPB87-FxhIHgsJAWy8cTr7swG2rUPKv0CW1sz1BRoFjx4zwBpCmN4Pt4jJf6gtadoAGiHvCfYH4AG8yZHvbKhemBcem70rPd2Q",
                                 "https://lh3.googleusercontent.com/aida-public/AB6AXuBoeOF-OgclD-R4fP4ey9x71hqSqGmaKh7e3L82iOEhEtziNbc6bUtBE0ryihdxj6vkwXcvHfy0Lr6LJCTHhOCY7D-4htCf_0w9XthwHowNHZszMBfe2fC80w_bWU4wHAKtMK7rryv5hgHHqiJ_aCDQxxYPVcFWTUMIIZ-5qINiKAABlp9o_JfK0v92SaqkRzETVQl1mQOMYHHmZtHdjG2UG9NFMNHk9OsR29nMVgkRXKVKQ-BVS8u2JOucNfCHrAttpyl7Q99qzgo"
                             ].map((img, idx) => (
-                                <div 
-                                    key={idx} 
-                                    onClick={() => setMainImage(img)}
-                                    className={`aspect-square rounded-lg overflow-hidden bg-[#2a2a2a] cursor-pointer transition-all ${mainImage === img ? 'ring-2 ring-cyan-400' : 'opacity-60 hover:opacity-100'}`}
-                                >
+                                <div key={idx} onClick={() => setMainImage(img)}
+                                    className={`aspect-square rounded-2xl overflow-hidden bg-white cursor-pointer transition-all border-2 ${mainImage === img ? 'border-purple-500 shadow-lg shadow-purple-100' : 'border-transparent opacity-70 hover:opacity-100 hover:border-purple-200'}`}>
                                     <img src={img} className="w-full h-full object-cover" alt="Product view" />
                                 </div>
                             ))}
@@ -69,102 +139,130 @@ const Product = () => {
 
                     {/* Right: Product Info */}
                     <div className="lg:col-span-5 flex flex-col">
-                        <nav className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-[#b9cacb] mb-6 font-semibold">
+                        <nav className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-gray-400 mb-6 font-semibold">
                             <span>Products</span>
                             <span className="material-symbols-outlined text-[12px]">chevron_right</span>
-                            <span>Apparel</span>
+                            <span>{product?.category || 'Apparel'}</span>
                             <span className="material-symbols-outlined text-[12px]">chevron_right</span>
-                            <span className="text-[#00dbe9]">T-Shirts</span>
+                            <span className="text-purple-600">{product?.name || 'T-Shirts'}</span>
                         </nav>
 
-                        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tighter mb-4 text-[#f6f6f6] leading-tight">Premium Studio Tee</h1>
-                        
-                        <div className="flex items-center gap-6 mb-8">
-                            <span className="text-2xl font-light text-[#e5e2e1]">₹399.00</span>
-                            <div className="h-4 w-[1px] bg-[#3b494b]"></div>
-                            <div className="flex items-center gap-1">
-                                <div className="flex text-[#7df4ff]">
-                                    {[1, 2, 3, 4, 5].map((s) => (
-                                        <span key={s} className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                                    ))}
-                                </div>
-                                <span className="text-xs text-[#b9cacb]">(128 Reviews)</span>
-                            </div>
-                        </div>
+                        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-gray-900 leading-tight">{product?.name || 'Premium Studio Tee'}</h1>
 
-                        <p className="text-[#b9cacb] leading-relaxed mb-10 max-w-md">
-                            Sustainably sourced, 240GSM heavy-weight cotton. Precision-engineered for durability and a structured, oversized fit that maintains its shape over time.
-                        </p>
+                        <div className="flex items-center gap-6 mb-3">
+                            <span className="text-3xl font-bold text-gray-900">₹{effectivePrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                            {selectedVariant && Number(selectedVariant.price_adjustment) !== 0 && (
+                                <span className="text-xs text-gray-400">(Base ₹{product.base_price.toLocaleString('en-IN')} + ₹{Number(selectedVariant.price_adjustment).toLocaleString('en-IN')} variant)</span>
+                            )}
+                        </div>
+                        {stockQty !== null && (
+                            <p className={`text-xs font-bold mb-5 ${isOutOfStock ? 'text-red-500' : isLowStock ? 'text-amber-500' : 'text-green-600'}`}>
+                                {isOutOfStock ? '⊘ Out of Stock' : isLowStock ? `⚠ Only ${stockQty} left` : `✓ In Stock (${stockQty} units)`}
+                            </p>
+                        )}
+
+                        <div 
+                            className="text-gray-500 leading-relaxed mb-8 max-w-md product-description"
+                            dangerouslySetInnerHTML={{ __html: product?.desc || 'Sustainably sourced, 240GSM heavy-weight cotton. Precision-engineered for durability.' }}
+                        />
 
                         {/* Color Selection */}
-                        <div className="mb-8">
-                            <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#b9cacb] mb-3">Color: <span className="text-white">{selectedColor}</span></p>
-                            <div className="flex gap-4">
-                                {swatches.map((swatch) => (
-                                    <button 
-                                        key={swatch.color}
-                                        onClick={() => {
-                                            setSelectedColor(swatch.color);
-                                            setMainImage(swatch.img);
-                                        }}
-                                        className={`w-8 h-8 rounded-full ${swatch.bg} transition-all ${selectedColor === swatch.color ? 'ring-2 ring-cyan-400 ring-offset-2 ring-offset-[#131313]' : 'hover:scale-110'}`}
-                                        title={swatch.color}
-                                    />
-                                ))}
+                        {uniqueColors.length > 0 && (
+                            <div className="mb-7">
+                                <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-gray-400 mb-3">Color: <span className="text-gray-800">{selectedColor || '—'}</span></p>
+                                <div className="flex gap-3 flex-wrap">
+                                    {uniqueColors.map(color => (
+                                        <button key={color} onClick={() => handleColorSelect(color)} title={color}
+                                            style={{ backgroundColor: color.toLowerCase() }}
+                                            className={`w-9 h-9 rounded-full border-2 transition-all ${selectedColor === color ? 'border-purple-500 ring-2 ring-purple-400 ring-offset-2' : 'border-gray-200 hover:scale-110'}`}
+                                        />
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         {/* Size Selection */}
-                        <div className="mb-10">
-                            <div className="flex justify-between items-center mb-4">
-                                <h3 className="text-[11px] uppercase tracking-widest font-bold text-[#b9cacb]">Select Size</h3>
-                                <button className="text-[10px] uppercase tracking-wider underline decoration-cyan-400/40 hover:decoration-cyan-400 transition-all">Size Guide</button>
+                        {uniqueSizes.length > 0 && (
+                            <div className="mb-8">
+                                <div className="flex justify-between items-center mb-3">
+                                    <h3 className="text-[11px] uppercase tracking-widest font-bold text-gray-400">Select Size</h3>
+                                    <button className="text-[10px] uppercase tracking-wider text-purple-500 font-bold hover:underline">Size Guide</button>
+                                </div>
+                                <div className="grid grid-cols-5 gap-2">
+                                    {uniqueSizes.map(size => (
+                                        <button key={size} onClick={() => handleSizeSelect(size)}
+                                            className={`py-3 rounded-xl border text-xs font-bold transition-all ${selectedSize === size ? 'border-purple-500 bg-purple-600 text-white shadow-lg shadow-purple-200' : 'border-gray-200 text-gray-600 hover:border-purple-400 hover:text-purple-600 bg-white'}`}>
+                                            {size}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
-                            <div className="grid grid-cols-5 gap-2">
-                                {sizes.map((size) => (
-                                    <button 
-                                        key={size}
-                                        onClick={() => setSelectedSize(size)}
-                                        className={`py-3 rounded-lg border text-xs font-semibold transition-all ${selectedSize === size ? 'border-cyan-400 bg-cyan-400 text-black' : 'border-[#3b494b] text-white hover:border-white'}`}
-                                    >
-                                        {size}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
+                        )}
 
-                        {/* Quantity and CTA */}
-                        <div className="flex gap-4 mb-12">
-                            <div className="flex items-center bg-[#1c1b1b] rounded-xl px-2">
-                                <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="p-2 text-[#b9cacb] hover:text-white"><span className="material-symbols-outlined">remove</span></button>
-                                <span className="w-10 text-center font-bold text-sm">{quantity}</span>
-                                <button onClick={() => setQuantity(q => q + 1)} className="p-2 text-[#b9cacb] hover:text-white"><span className="material-symbols-outlined">add</span></button>
+                        {uniqueSizes.length === 0 && uniqueColors.length === 0 && (
+                            <div className="mb-8">
+                                <h3 className="text-[11px] uppercase tracking-widest font-bold text-gray-400 mb-3">Select Size</h3>
+                                <div className="grid grid-cols-5 gap-2">
+                                    {['S','M','L','XL','XXL'].map(size => (
+                                        <button key={size} onClick={() => setSelectedSize(size)}
+                                            className={`py-3 rounded-xl border text-xs font-bold transition-all ${selectedSize === size ? 'border-purple-500 bg-purple-600 text-white shadow-lg shadow-purple-200' : 'border-gray-200 text-gray-600 hover:border-purple-400 bg-white'}`}>
+                                            {size}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
-                            <button 
-                                onClick={handleAddToCart}
-                                className={`flex-1 py-4 rounded-xl font-extrabold tracking-tight transition-all flex items-center justify-center gap-2 shadow-lg ${btnState === 'added' ? 'bg-[#00eefc] text-black' : 'bg-white text-black hover:scale-[1.02] active:scale-[0.98]'}`}
+                        )}
+
+                        {/* Quantity + Add to Cart */}
+                        <div className="flex gap-4 mb-4">
+                            <div className="flex items-center bg-white border border-gray-200 rounded-xl px-2 shadow-sm">
+                                <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="p-2 text-gray-400 hover:text-gray-800 transition-colors">
+                                    <span className="material-symbols-outlined">remove</span>
+                                </button>
+                                <span className="w-10 text-center font-bold text-sm text-gray-900">{quantity}</span>
+                                <button onClick={() => setQuantity(q => q + 1)} className="p-2 text-gray-400 hover:text-gray-800 transition-colors">
+                                    <span className="material-symbols-outlined">add</span>
+                                </button>
+                            </div>
+                            <button
+                                onClick={() => handleAddToCart()}
+                                disabled={isOutOfStock}
+                                className={`flex-1 py-4 rounded-xl font-extrabold tracking-tight transition-all flex items-center justify-center gap-2 shadow-lg ${
+                                    isOutOfStock ? 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200' :
+                                    btnState === 'added' ? 'bg-green-500 text-white shadow-green-200' :
+                                    'bg-gray-900 text-white hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] shadow-gray-300'
+                                }`}
                             >
-                                {btnState === 'added' ? (
-                                    <>Added! <span className="material-symbols-outlined text-lg">check_circle</span></>
-                                ) : (
-                                    <>Customize & Order <span className="material-symbols-outlined text-lg">edit_note</span></>
-                                )}
+                                {btnState === 'added' ? (<>Added! <span className="material-symbols-outlined text-lg">check_circle</span></>) : (<>Add to Cart <span className="material-symbols-outlined text-lg">shopping_cart</span></>)}
                             </button>
                         </div>
 
-                        {/* Specs List */}
-                        <div className="space-y-6 pt-10 border-t border-white/10">
+                        {/* Customize CTA */}
+                        <button
+                            onClick={() => setShowCustomizer(true)}
+                            disabled={isOutOfStock}
+                            className={`w-full mb-10 py-4 rounded-xl font-extrabold tracking-tight transition-all flex items-center justify-center gap-2 border-2 ${
+                                isOutOfStock ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                                : 'border-purple-400 text-purple-600 hover:bg-purple-600 hover:text-white hover:border-purple-600 hover:scale-[1.01] active:scale-[0.99] bg-white shadow-sm'
+                            }`}
+                        >
+                            <span className="material-symbols-outlined text-lg">brush</span>
+                            Customize &amp; Add (Upload Your Design)
+                        </button>
+
+                        {/* Specs */}
+                        <div className="space-y-5 pt-8 border-t border-gray-100">
                             {[
                                 { title: 'Material & Production', desc: '100% Organic combed cotton, 240GSM heavyweight weave. Zero-toxicity sustainable dye process.', icon: 'check_circle' },
                                 { title: 'Fit Specs', desc: 'Relaxed silhouette with dropped shoulders and reinforced crewneck collar.', icon: 'straighten' },
                                 { title: 'Care Instructions', desc: 'Machine wash cold. Do not tumble dry. Iron inside out to protect custom prints.', icon: 'wash' },
                             ].map((spec, idx) => (
-                                <div key={idx} className="group cursor-default">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <span className="text-xs font-bold text-white uppercase tracking-wider">{spec.title}</span>
-                                        <span className="material-symbols-outlined text-cyan-400">{spec.icon}</span>
+                                <div key={idx}>
+                                    <div className="flex justify-between items-center mb-1">
+                                        <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">{spec.title}</span>
+                                        <span className="material-symbols-outlined text-purple-400 text-lg">{spec.icon}</span>
                                     </div>
-                                    <p className="text-sm text-[#b9cacb]">{spec.desc}</p>
+                                    <p className="text-sm text-gray-500">{spec.desc}</p>
                                 </div>
                             ))}
                         </div>
@@ -172,41 +270,35 @@ const Product = () => {
                 </section>
 
                 {/* Related Products */}
-                <section className="border-t border-white/10 pt-20">
-                    <div className="flex justify-between items-end mb-12">
+                <section className="border-t border-gray-100 pt-16">
+                    <div className="flex justify-between items-end mb-10">
                         <div>
-                            <h2 className="text-3xl font-extrabold tracking-tighter mb-2">Complete the Collection</h2>
-                            <p className="text-[#b9cacb] text-sm">Engineered essentials designed for the digital atelier.</p>
+                            <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 mb-2">Complete the Collection</h2>
+                            <p className="text-gray-400 text-sm">Engineered essentials designed for the digital atelier.</p>
                         </div>
                         <Link to="/shop">
-                            <button className="text-sm font-bold text-cyan-400 flex items-center gap-2 hover:gap-3 transition-all">
+                            <button className="text-sm font-bold text-purple-600 flex items-center gap-2 hover:gap-3 transition-all">
                                 Shop All <span className="material-symbols-outlined">arrow_right_alt</span>
                             </button>
                         </Link>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-black">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                         {[
                             { name: 'Studio Hoodie V1', price: '₹1,265.00', img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDrbXyIcSEODyMakV40ASIGCqV4YkMJ_jVd2D17IH6axEjm7Nc4rsZq9I-TK4Ot3i_hhsihe2tJGXk_rHIv1rNqSVqdCDMK01Vp_vxj-7UfrebhWZJw_oOlVa0ra4cZc1a2OsQFZ2nhf4KVkj6xxP_E6tDOflmGi0il2EyQzlJa8okmevtKp9IG0s6KxfxcTd92ZkbBzYqISVySiwRSF-sCx_5GtLnm1FNnYKU56nX4w4B8kt-e7v_kWJedEDp-3j6Of8o7CZgsJkk" },
-                            { name: 'Utility Pants', price: '₹899.00', img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAfGNJTvir5gwKZV6mCpkVAb0RpzwBK9OeRqn2-YgE-dm07uFqr_Wf6VnLccW2aJ8eMFIUktXsW0OCgO5MVPc0u2rzv05CP1P-JrxmdcsjRYXEy_dLynxyv_mHcGimSekLdbHgERlO44uj4F1VJF9SbuLFr5x7fVHGs5EAe2dJVtbPNn-QYtkLCKA2_y4zzhVGg2Y2ay-W8d2QxLUDmJmw_mSEGZC3r4x71eCE-GcbWvbBhnUNuycBdm-9O76DMu6JFQUllCdpVkZA" },
+                            { name: 'Utility Pants', price: '₹899.00', img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAfGNJTvir5gwKZV6mCpkVAb0RpzwBK9OeRqn2-YgE-dm07uFqr_Wf6VnLccW2aJ8eMFIUktXsW0OCgO5MVPc0u2rzv05CP1P-JrxmdcsjRYXEy_dLynxyv_mHcGimSekLdbHgERlO44uj4F1VJF9SbuLFr5x7fVHGs5EAe2dJVtbPNn-QYtkLCKA2_y4zzhVGg2Y2ay-W8d2QxLUDmJmw_mSEGZC3r4x71eCG-GcbWvbBhnUNuycBdm-9O76DMu6JFQUllCdpVkZA" },
                             { name: 'Precision Tee - Slate', price: '₹399.00', img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDQziId24Q6OlV8HtgNHc8Up3cMNA7QGvWL8NFaigEiwYJI6o9qCGRJx_WyjpzNgMctgJQi5Q8nhGTRCPdd8GFZ1tbjfPiWj-w3hOUme7duzHmCi6ZjB0DZFRWi658NQyaQ9v3xrPJYwPr7LTuAyIX5Y0Bxi6d9_61eAsjrGQl3TIb_pkLrL3-ZgO5M5sJK59KWrz_-ftScibFJOinLnKhx3mM7Xo4QAvvq-vAj3aK5jmsUQQjHzL48snYxJiav2JXpaPcycXxt7Ec" },
                             { name: 'Studio Logo Cap', price: '₹150.00', img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCC0mjprvUaAkSY-8glCnlpXD_FWHcqX3DNEjz6Aqkgs8IEBK9qYhd8FC-pcZhBW93k5QztGV0OB8vTcRb5Wl_1EyXDllzoQnJwJ8P1_GNu-fEeO2bLaNU8he3rGwMPMFNtMenk7yOq04TCamT3zOQT3swKC07rDhLJxCNlY6AzIG-MqO-poL99tXeG8-oFsdW7M1L-Bt0iIURfBM7JgVZm19GZMMBoFrLQLrwT5tKpEYIPEBYqfY7hAFMtxSR5f75wk0KKKU8HNS8" }
                         ].map((p, idx) => (
-                            <div key={idx} className="group bg-[#1c1b1b] rounded-xl overflow-hidden hover:shadow-cyan-900/10 hover:shadow-2xl transition-all">
+                            <div key={idx} className="group bg-white rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-purple-100/60 transition-all border border-gray-100">
                                 <div className="aspect-[3/4] overflow-hidden relative">
                                     <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src={p.img} alt={p.name} />
                                     <div className="absolute bottom-4 left-4 right-4 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                                        <button className="w-full py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-lg text-xs font-bold uppercase tracking-wider">Quick Add</button>
+                                        <button className="w-full py-2 bg-white/90 backdrop-blur-md border border-purple-200 text-purple-700 rounded-xl text-xs font-bold uppercase tracking-wider shadow">Quick Add</button>
                                     </div>
                                 </div>
                                 <div className="p-4">
-                                    <h4 className="text-sm font-bold text-white mb-1">{p.name}</h4>
-                                    <div className="flex justify-between items-center text-[#b9cacb]">
-                                        <span className="text-xs">{p.price}</span>
-                                        <div className="flex gap-1">
-                                            <div className="w-2 h-2 rounded-full bg-surface-container-highest"></div>
-                                            <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
-                                        </div>
-                                    </div>
+                                    <h4 className="text-sm font-bold text-gray-800 mb-1">{p.name}</h4>
+                                    <span className="text-sm font-bold text-purple-600">{p.price}</span>
                                 </div>
                             </div>
                         ))}

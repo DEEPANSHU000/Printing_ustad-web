@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { supabase } from '../supabaseClient';
 
 const Home = () => {
   const { addItem } = useCart();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [activeTab, setActiveTab] = useState('seasonal');
+  const [dbProducts, setDbProducts] = useState([]);
+  const [productsLoading, setProductsLoading] = useState(true);
 
   const slides = [
     {
@@ -45,28 +48,42 @@ const Home = () => {
     return () => clearInterval(timer);
   }, [slides.length]);
 
+  // Fetch products from Supabase
+  useEffect(() => {
+    const fetchProducts = async () => {
+      if (!supabase) { setProductsLoading(false); return; }
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('id, name, base_price, base_image_url, min_order_quantity, categories(name)')
+          .eq('is_active', true)
+          .order('created_at', { ascending: true });
+        if (error) throw error;
+        setDbProducts(data || []);
+      } catch (err) {
+        console.error('Failed to load products:', err.message);
+      } finally {
+        setProductsLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  // Map DB products into the tab format
+  const mapProduct = (p) => ({
+    id: p.id,
+    name: p.name,
+    price: Number(p.base_price),
+    minQty: p.min_order_quantity || 1,
+    img: p.base_image_url || 'https://placehold.co/400x400/f3f0ff/6d28d9?text=Product',
+    category: p.categories?.name || 'Products',
+  });
+
+  const allMapped = dbProducts.map(mapProduct);
   const products = {
-    seasonal: [
-      { id:'tshirt-rn', name:'Round Neck T-Shirts', price:399, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1774075905173_290.jpg/full/400,400/0/default.webp' },
-      { id:'polo-ts', name:'Polo T-Shirts', price:650, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1774075758039_237.jpg/full/400,400/0/default.webp' },
-      { id:'desk-cal', name:'Desk Calendars', price:270, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1761832333077_818.jpg/full/400,400/0/default.webp' },
-      { id:'wall-cal', name:'Wall Calendars', price:20, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1761832262857_830.jpg/full/400,400/0/default.webp' },
-      { id:'hoodie', name:'Custom Hoodies', price:1265, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1733319874776_931.jpg/full/400,400/0/default.webp' },
-    ],
-    bestseller: [
-      { id:'photo-cup', name:'Photo Cup', price:230, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1687877530935_150.jpg/full/400,400/0/default.webp' },
-      { id:'acrylic-frame', name:'Acrylic Photo Frames', price:450, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1687872720138_892.jpg/full/400,400/0/default.webp' },
-      { id:'led-bottle', name:'LED Temp Water Bottle', price:549, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/water-bottle-in-type-4.jpg/full/400,400/0/default.webp' },
-      { id:'pen-gold', name:'Pen with Golden Touch', price:58, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1678351724818_367.jpg/full/400,400/0/default.webp' },
-      { id:'luxury-diary', name:'Luxury Diary & Pen Set', price:675, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1725621427039_318.jpg/full/400,400/0/default.webp' },
-    ],
-    trending: [
-      { id:'acrylic-clock', name:'Acrylic Clocks', price:999, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1687872653926_751.jpg/full/400,400/0/default.webp' },
-      { id:'keychain', name:'Keychains', price:120, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1687874976160_151.jpg/full/400,400/0/default.webp' },
-      { id:'magic-mug', name:'Magic Mugs', price:350, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1765530043357_329.jpg/full/400,400/0/default.webp' },
-      { id:'mousepad-cal', name:'Mouse Pad Calendars', price:170, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1761832422386_191.jpg/full/400,400/0/default.webp' },
-      { id:'wood-frame', name:'Wooden Photo Frames', price:800, minQty:1, img:'https://img-srv.arcprint.com/adpsSTG/category/1687874765305_638.jpg/full/400,400/0/default.webp' },
-    ]
+    seasonal:   allMapped.slice(0, 5),
+    bestseller: allMapped.slice(5, 10),
+    trending:   allMapped.slice(10, 15),
   };
 
   return (
@@ -165,29 +182,44 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {products[activeTab].map((p) => (
-              <div key={p.id} className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all group overflow-hidden">
-                <div className="relative overflow-hidden aspect-square bg-gray-50 product-card">
-                  <img src={p.img} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="card-overlay absolute bottom-0 left-0 right-0 bg-white/95 py-2 px-3 flex gap-2">
-                    <button 
-                      onClick={() => addItem({ ...p, quantity: 1, image: p.img, attributes: { size: 'Default' } })}
-                      className="flex-1 bg-purple-600 text-white text-xs font-semibold py-1.5 rounded-lg hover:bg-purple-700 transition-colors"
-                    >
-                      Add to Cart
-                    </button>
-                    <Link to={`/product/${p.id}`} className="flex-1 border border-purple-600 text-purple-600 text-xs font-semibold py-1.5 rounded-lg text-center hover:bg-purple-50 transition-colors">
-                      Customize
-                    </Link>
+            {productsLoading ? (
+              // Loading skeleton
+              Array.from({ length: 5 }).map((_, idx) => (
+                <div key={idx} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden animate-pulse">
+                  <div className="aspect-square bg-gray-200" />
+                  <div className="p-3 space-y-2">
+                    <div className="h-3 bg-gray-200 rounded w-3/4" />
+                    <div className="h-3 bg-gray-200 rounded w-1/2" />
                   </div>
                 </div>
-                <div className="p-3">
-                  <h3 className="text-sm font-medium text-gray-800 leading-tight mb-1">{p.name}</h3>
-                  <p className="text-purple-700 font-bold text-sm">₹{p.price.toLocaleString('en-IN')}</p>
-                  <p className="text-xs text-gray-400">Min. qty: {p.minQty}</p>
+              ))
+            ) : products[activeTab].length === 0 ? (
+              <p className="col-span-5 text-center text-gray-400 py-8">No products found.</p>
+            ) : (
+              products[activeTab].map((p) => (
+                <div key={p.id} className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all group overflow-hidden">
+                  <div className="relative overflow-hidden aspect-square bg-gray-50 product-card">
+                    <img src={p.img} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <div className="card-overlay absolute bottom-0 left-0 right-0 bg-white/95 py-2 px-3 flex gap-2">
+                      <button 
+                        onClick={() => addItem({ id: p.id, name: p.name, price: p.price, quantity: 1, image: p.img, attributes: { size: 'Default' } })}
+                        className="flex-1 bg-purple-600 text-white text-xs font-semibold py-1.5 rounded-lg hover:bg-purple-700 transition-colors"
+                      >
+                        Add to Cart
+                      </button>
+                      <Link to={`/product/${p.id}`} className="flex-1 border border-purple-600 text-purple-600 text-xs font-semibold py-1.5 rounded-lg text-center hover:bg-purple-50 transition-colors">
+                        Customize
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <h3 className="text-sm font-medium text-gray-800 leading-tight mb-1">{p.name}</h3>
+                    <p className="text-purple-700 font-bold text-sm">₹{p.price.toLocaleString('en-IN')}</p>
+                    <p className="text-xs text-gray-400">Min. qty: {p.minQty}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </section>

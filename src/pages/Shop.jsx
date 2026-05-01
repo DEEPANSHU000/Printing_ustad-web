@@ -1,53 +1,106 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { supabase } from '../supabaseClient';
+
+const defaultCategories = [
+    { name: 'All Products',       value: 'All' },
+    { name: 'Apparel & Clothing', value: 'apparel' },
+    { name: 'Accessories',        value: 'accessories' },
+    { name: 'Mugs & Drinkware',   value: 'mugs' },
+    { name: 'Gifts and Awards',   value: 'gifts-and-award' },
+    { name: 'Calendars',          value: 'calendars' },
+    { name: 'Best Seller',        value: 'best-seller' },
+    { name: 'Drinkware',          value: 'drinkware' },
+    { name: 'Notebooks & Diaries',value: 'notebooks-diaries' },
+    { name: 'Pens – Premium',     value: 'pens-premium' },
+    { name: 'Clocks',             value: 'clocks' },
+];
+
+
+
+
 
 const Shop = () => {
   const { addItem } = useCart();
+  const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
   const [priceRange, setPriceRange] = useState({ min: 0, max: Infinity });
   const [sortBy, setSortBy] = useState('default');
 
-  const categories = [
-    { name: 'All Products', value: 'All' },
-    { name: 'T-Shirts & Hoodies', value: 'Apparel' },
-    { name: 'Mugs & Drinkware', value: 'Mugs' },
-    { name: 'Water Bottles', value: 'Bottles' },
-    { name: 'Visiting Cards', value: 'Stationery' },
-    { name: 'Diaries & Notebooks', value: 'Diaries' },
-    { name: 'Photo Frames', value: 'Frames' },
-    { name: 'Caps & Accessories', value: 'Accessories' },
-    { name: 'Calendars', value: 'Calendars' },
-    { name: 'Corporate Kits', value: 'Corporate' },
-  ];
+  const [categories, setCategories] = useState(defaultCategories);
+  const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const allProducts = [
-    { id:'rn-tshirt', name:'Round Neck T-Shirts', price:399, minQty:1, cat:'Apparel', img:'https://img-srv.arcprint.com/adpsSTG/category/1774075905173_290.jpg/full/400,400/0/default.webp' },
-    { id:'polo-tshirt', name:'Polo T-Shirts', price:650, minQty:1, cat:'Apparel', img:'https://img-srv.arcprint.com/adpsSTG/category/1774075758039_237.jpg/full/400,400/0/default.webp' },
-    { id:'custom-hoodie', name:'Custom Hoodies', price:1265, minQty:1, cat:'Apparel', img:'https://img-srv.arcprint.com/adpsSTG/category/1733319874776_931.jpg/full/400,400/0/default.webp' },
-    { id:'custom-caps', name:'Custom Caps', price:150, minQty:10, cat:'Accessories', img:'https://img-srv.arcprint.com/adpsSTG/category/1687873327336_970.jpg/full/400,400/0/default.webp' },
-    { id:'photo-cup', name:'Photo Cup', price:230, minQty:1, cat:'Mugs', img:'https://img-srv.arcprint.com/adpsSTG/category/1687877530935_150.jpg/full/400,400/0/default.webp' },
-    { id:'magic-mug', name:'Magic Mugs', price:350, minQty:1, cat:'Mugs', img:'https://img-srv.arcprint.com/adpsSTG/category/1765530043357_329.jpg/full/400,400/0/default.webp' },
-    { id:'led-bottle', name:'LED Temp Water Bottle', price:549, minQty:1, cat:'Bottles', img:'https://img-srv.arcprint.com/adpsSTG/category/water-bottle-in-type-4.jpg/full/400,400/0/default.webp' },
-    { id:'carabiner-bottle', name:'Carabiner Water Bottles', price:325, minQty:1, cat:'Bottles', img:'https://img-srv.arcprint.com/adpsSTG/category/1681901382671_191.jpg/full/400,400/0/default.webp' },
-    { id:'acrylic-frame', name:'Acrylic Photo Frames', price:450, minQty:1, cat:'Frames', img:'https://img-srv.arcprint.com/adpsSTG/category/1687872720138_892.jpg/full/400,400/0/default.webp' },
-    { id:'wood-frame', name:'Wooden Photo Frames', price:800, minQty:1, cat:'Frames', img:'https://img-srv.arcprint.com/adpsSTG/category/1687874765305_638.jpg/full/400,400/0/default.webp' },
-    { id:'led-frame', name:'LED Clip On Frame', price:850, minQty:1, cat:'Frames', img:'https://img-srv.arcprint.com/adpsSTG/category/1687875115423_350.jpg/full/400,400/0/default.webp' },
-    { id:'acrylic-clock', name:'Acrylic Clocks', price:999, minQty:1, cat:'Frames', img:'https://img-srv.arcprint.com/adpsSTG/category/1687872653926_751.jpg/full/400,400/0/default.webp' },
-    { id:'pen-gold', name:'Pen with Golden Touch', price:58, minQty:1, cat:'Stationery', img:'https://img-srv.arcprint.com/adpsSTG/category/1678351724818_367.jpg/full/400,400/0/default.webp' },
-    { id:'keychain', name:'Keychains', price:120, minQty:1, cat:'Accessories', img:'https://img-srv.arcprint.com/adpsSTG/category/1687874976160_151.jpg/full/400,400/0/default.webp' },
-    { id:'luxury-diary', name:'Luxury Diary & Pen Set', price:675, minQty:1, cat:'Diaries', img:'https://img-srv.arcprint.com/adpsSTG/category/1725621427039_318.jpg/full/400,400/0/default.webp' },
-    { id:'leather-diary', name:'Custom Leather Diary', price:230, minQty:1, cat:'Diaries', img:'https://img-srv.arcprint.com/adpsSTG/category/1720882534503_377.jpg/full/400,400/0/default.webp' },
-    { id:'exec-diary', name:'Executive Diary', price:375, minQty:1, cat:'Diaries', img:'https://img-srv.arcprint.com/adpsSTG/category/1687873546838_915.jpg/full/400,400/0/default.webp' },
-    { id:'desk-cal', name:'Desk Calendars', price:270, minQty:1, cat:'Calendars', img:'https://img-srv.arcprint.com/adpsSTG/category/1761832333077_818.jpg/full/400,400/0/default.webp' },
-    { id:'wall-cal', name:'Wall Calendars', price:20, minQty:1, cat:'Calendars', img:'https://img-srv.arcprint.com/adpsSTG/category/1761832262857_830.jpg/full/400,400/0/default.webp' },
-    { id:'mousepad-cal', name:'Mouse Pad Calendars', price:170, minQty:1, cat:'Calendars', img:'https://img-srv.arcprint.com/adpsSTG/category/1761832422386_191.jpg/full/400,400/0/default.webp' },
-    { id:'welcome-kit', name:'Office Welcome Kit', price:700, minQty:1, cat:'Corporate', img:'https://img-srv.arcprint.com/adpsSTG/category/1687873459441_632.jpg/full/400,400/0/default.webp' },
-    { id:'fusion-combo', name:'Fusion Combo', price:1475, minQty:1, cat:'Corporate', img:'https://img-srv.arcprint.com/adpsSTG/category/1725621483382_603.jpg/full/400,400/0/default.webp' },
-    { id:'new-hire-box', name:'New Hire Swag Box', price:875, minQty:1, cat:'Corporate', img:'https://img-srv.arcprint.com/adpsSTG/category/1725621504589_922.jpg/full/400,400/0/default.webp' },
-    { id:'drinkware-combo', name:'3 in 1 Drinkware Combo', price:1150, minQty:1, cat:'Corporate', img:'https://img-srv.arcprint.com/adpsSTG/category/1725621346185_454.jpg/full/400,400/0/default.webp' },
-  ];
+  useEffect(() => {
+    const fetchShopData = async () => {
+      try {
+        setLoading(true);
+        // Ensure Supabase client is initialized
+        if (!supabase) {
+            setLoading(false);
+            return;
+        }
+
+        const { data: catData, error: catError } = await supabase
+          .from('categories')
+          .select('*');
+
+        if (!catError && catData && catData.length > 0) {
+            setCategories([
+                { name: 'All Products', value: 'All' },
+                ...catData.map(c => ({ name: c.name, value: c.slug }))
+            ]);
+        }
+
+        const { data: prodData, error: prodError } = await supabase
+          .from('products')
+          .select('*, categories(slug)');
+
+        if (!prodError && prodData && prodData.length > 0) {
+            const mappedProducts = prodData.map(p => ({
+                id: p.id,
+                name: p.name,
+                price: Number(p.base_price) || 0,
+                minQty: p.min_order_quantity || 1,
+                cat: p.categories?.slug || 'all',
+                img: p.base_image_url || 'https://placehold.co/400x400/131313/ffffff?text=Product'
+            }));
+            setAllProducts(mappedProducts);
+        }
+      } catch (err) {
+        console.error("Error fetching shop data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchShopData();
+
+    // Realtime sync for products - watch for any changes to products or categories
+    const productsChannel = supabase
+      .channel('shop-data-sync')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, fetchShopData)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'categories' }, fetchShopData)
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(productsChannel);
+    };
+  }, []);
+
+  // ── Sync category from URL query param (?category=slug) ──
+  useEffect(() => {
+    const catParam = searchParams.get('category');
+    if (catParam) {
+      setActiveCategory(catParam);
+    } else {
+      setActiveCategory('All');
+    }
+    // Reset other filters when category changes via URL
+    setSearchQuery('');
+    setPriceRange({ min: 0, max: Infinity });
+  }, [searchParams]);
 
   const filteredProducts = useMemo(() => {
     let result = allProducts.filter(p => {
@@ -62,7 +115,7 @@ const Shop = () => {
     else if (sortBy === 'name') result.sort((a,b) => a.name.localeCompare(b.name));
 
     return result;
-  }, [searchQuery, activeCategory, priceRange, sortBy]);
+  }, [searchQuery, activeCategory, priceRange, sortBy, allProducts]); // ← allProducts added
 
   const resetAll = () => {
     setSearchQuery('');
@@ -71,6 +124,10 @@ const Shop = () => {
     setSortBy('default');
   };
 
+  // Active category label for breadcrumb/heading
+  const activeCatLabel = categories.find(c => c.value === activeCategory)?.name || 'All Custom Products';
+
+
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Breadcrumb */}
@@ -78,7 +135,13 @@ const Shop = () => {
         <nav className="text-xs text-gray-500 flex items-center gap-1">
           <Link to="/" className="hover:text-purple-600">Home</Link>
           <span className="material-symbols-outlined text-sm">chevron_right</span>
-          <span className="text-gray-800 font-medium">All Products</span>
+          <Link to="/shop" className="hover:text-purple-600">All Products</Link>
+          {activeCategory !== 'All' && (
+            <>
+              <span className="material-symbols-outlined text-sm">chevron_right</span>
+              <span className="text-gray-800 font-medium">{activeCatLabel}</span>
+            </>
+          )}
         </nav>
       </div>
 
@@ -91,12 +154,14 @@ const Shop = () => {
               <ul className="space-y-2 text-sm">
                 {categories.map(cat => (
                   <li key={cat.value}>
-                    <button 
-                      onClick={() => setActiveCategory(cat.value)}
-                      className={`w-full text-left transition-colors hover:text-purple-600 ${activeCategory === cat.value ? 'text-purple-600 font-semibold' : 'text-gray-600'}`}
+                    <Link
+                      to={cat.value === 'All' ? '/shop' : `/shop?category=${cat.value}`}
+                      className={`w-full text-left transition-colors hover:text-purple-600 block ${
+                        activeCategory === cat.value ? 'text-purple-600 font-semibold' : 'text-gray-600'
+                      }`}
                     >
                       {cat.name}
-                    </button>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -129,7 +194,7 @@ const Shop = () => {
           {/* Top Bar */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">All Custom Products</h1>
+              <h1 className="text-2xl font-bold text-gray-900">{activeCatLabel}</h1>
               <p className="text-sm text-gray-500 mt-1">
                 {filteredProducts.length === 0 ? 'No products found' : `Showing ${filteredProducts.length} product${filteredProducts.length !== 1 ? 's' : ''}`}
               </p>
@@ -159,7 +224,19 @@ const Shop = () => {
           </div>
 
           {/* Product Grid */}
-          {filteredProducts.length > 0 ? (
+          {loading ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {Array.from({ length: 8 }).map((_, idx) => (
+                <div key={idx} className="bg-white rounded-3xl border border-purple-100 shadow-sm overflow-hidden animate-pulse">
+                  <div className="aspect-square bg-gray-200" />
+                  <div className="p-3 space-y-2">
+                    <div className="h-3 bg-gray-200 rounded w-3/4" />
+                    <div className="h-3 bg-gray-200 rounded w-1/2" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredProducts.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {filteredProducts.map(p => (
                 <div key={p.id} className="product-card bg-white rounded-3xl border border-purple-100 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
@@ -170,7 +247,7 @@ const Shop = () => {
                     )}
                     <div className="card-overlay absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm p-2 flex gap-2">
                       <button 
-                        onClick={() => addItem({ ...p, quantity: 1, image: p.img, attributes: { size: 'Default' } })}
+                        onClick={() => addItem({ id: p.id, name: p.name, price: p.price, quantity: 1, image: p.img, attributes: { size: 'Default' } })}
                         className="flex-1 bg-purple-600 text-white text-xs font-semibold py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center gap-1"
                       >
                         <span className="material-symbols-outlined text-sm">add_shopping_cart</span> Add

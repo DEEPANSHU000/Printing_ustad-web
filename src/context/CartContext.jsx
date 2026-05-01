@@ -51,6 +51,10 @@ export const CartProvider = ({ children }) => {
         }));
     };
 
+    const clearCart = () => {
+        setCart([]);
+    };
+
     const showToast = (message) => {
         setToast(message);
         setTimeout(() => setToast(null), 3000);
@@ -64,6 +68,7 @@ export const CartProvider = ({ children }) => {
             addItem, 
             removeItem, 
             updateQuantity, 
+            clearCart,
             cartCount,
             toast 
         }}>
